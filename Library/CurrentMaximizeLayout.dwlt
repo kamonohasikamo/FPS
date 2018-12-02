@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 711, y: 492}
   m_MaxSize: {x: 18006, y: 14042}
   vertical: 0
-  controlID: 45
+  controlID: 1985
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -154,8 +154,8 @@ MonoBehaviour:
     height: 926
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c8070000
-    m_LastClickedID: 0
+    m_SelectedIDs: 7aa2ffff
+    m_LastClickedID: -23942
     m_ExpandedIDs: a0fbffff00000000a6270000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 492}
   m_MaxSize: {x: 10004, y: 14042}
   vertical: 1
-  controlID: 46
+  controlID: 1986
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -261,9 +261,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0.25574428, y: -1.3590882, z: -6.0606627}
+    m_Target: {x: -0.761197, y: -5.639305, z: -3.8755798}
     speed: 2
-    m_Value: {x: 0.25574428, y: -1.3590882, z: -6.0606627}
+    m_Value: {x: -0.761197, y: -5.639305, z: -3.8755798}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -286,13 +286,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.002306684, y: 0.9803338, z: -0.19699888, w: 0.011478854}
+    m_Target: {x: -0.0017072738, y: 0.9624577, z: -0.27135846, w: -0.006055244}
     speed: 2
-    m_Value: {x: 0.002306684, y: 0.9803338, z: -0.19699888, w: 0.011478854}
+    m_Value: {x: -0.0017072739, y: 0.9624577, z: -0.27135846, w: -0.0060552442}
   m_Size:
-    m_Target: 8.973765
+    m_Target: 31.457945
     speed: 2
-    m_Value: 8.973765
+    m_Value: 31.457945
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -367,19 +367,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/F01_Script
+    - Assets/F02_Material/skyb1
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/F01_Script
+  - Assets/skyb1
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\cs16048\Documents\Unity\ActionGame
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 7c270000
-    m_LastClickedID: 10108
-    m_ExpandedIDs: 000000002e27000000ca9a3bffffff7f
+    m_SelectedIDs: 7a290000
+    m_LastClickedID: 10618
+    m_ExpandedIDs: 000000002e2700003c27000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -407,7 +407,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000002e270000
+    m_ExpandedIDs: 000000002e2700003c27000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -432,9 +432,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: c8070000
-    m_LastClickedInstanceID: 1992
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: 7aa2ffff
+    m_LastClickedInstanceID: -23942
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
