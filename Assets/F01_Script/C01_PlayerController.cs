@@ -5,10 +5,11 @@ using UnityEngine;
 public class C01_PlayerController : MonoBehaviour {
 
     private CharacterController charaController;//charaコンポーネント用変数
-    private Vector3 move = Vector3.zero;        //chara移動量ベクトル
-    private float speed = 5.0f;                 //スピード
-    private const float GRAVITY = 20.8f;         //重力定数
-    private float jumpPower = 15.0f;            //跳躍力
+    private Vector3             move = Vector3.zero;        //chara移動量ベクトル
+    private float               speed = 5.0f;                 //スピード
+    private const float         GRAVITY = 20.8f;         //重力定数
+    private float               jumpPower = 15.0f;            //跳躍力
+    private float rotationSpeed = 180.0f;
 
     /*
      * C#のお話:
@@ -24,6 +25,7 @@ public class C01_PlayerController : MonoBehaviour {
 	void Update () {
         float y = move.y;                                       //move.yの値を保持しておく。
         move = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+        Vector3 playerDir = move;       //移動方向を取得
         move *= speed;                                          //移動速度を乗算
         move.y += y;                                            //move.yの値を戻す
         if (charaController.isGrounded)                         //地面に足がついているかどうか
@@ -34,6 +36,12 @@ public class C01_PlayerController : MonoBehaviour {
             }
         }
         move.y = move.y - (GRAVITY * Time.deltaTime);           //y軸方向に重力を追加(代入)
+
+        if (playerDir.magnitude > 0.1f)
+        {
+            Quaternion q = Quaternion.LookRotation(playerDir);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, q, rotationSpeed * Time.deltaTime);
+        }
         charaController.Move(move * Time.deltaTime);            //chara移動
 	}
     /*Updateの中身
