@@ -10,25 +10,36 @@ public class C02_CameraController : MonoBehaviour {
         playerController = GameObject.FindWithTag("Player").GetComponent<C01_PlayerController>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            changeCameraMove();
-        }
-	}
-
-    private void changeCameraMove()
+    public void changeSight(bool type)
     {
-        if(transform.parent == null)
+        if (type)
         {
-            transform.parent        = playerController.transform;
-            transform.localPosition = Vector3.zero;
+            changeCameraMode_1stPerson();
         }
         else
         {
-            transform.parent        = null;
-            transform.position      = new Vector3(0, 4, -10);
+            changeCameraMove_3rdPerson();
         }
     }
+
+    private void changeCameraMode_1stPerson()
+    {
+        if (transform.parent == null)
+        {                           // もし親オブジェクトがいなければ
+            transform.parent = playerController.transform;        // 自身の親オブジェクトに、playerオブジェクトを指定.
+            transform.localPosition = Vector3.zero;             // カメラの相対位置を零に.
+            transform.localEulerAngles = Vector3.zero;          // カメラの相対角度を零に.(プレイヤーが向いている方向に)
+        }
+    }
+
+    private void changeCameraMove_3rdPerson()
+    {
+        if (transform.parent != null)
+        {                   // もし親オブジェクトがいるなら
+            transform.parent = null;                        // 親子関係を解除
+            transform.position = new Vector3(0, 4, -10);        // カメラ位置を基本視点に変更。
+            transform.localEulerAngles = Vector3.zero;      // カメラ角度を基本視点に変更
+        }
+    }
+
 }

@@ -10,6 +10,9 @@ public class C01_PlayerController : MonoBehaviour {
     private const float         GRAVITY = 20.8f;         //重力定数
     private float               jumpPower = 15.0f;            //跳躍力
     private float rotationSpeed = 180.0f;
+    private bool moveType = true;
+
+    public GameObject targetEnemy = null;
 
     /*
      * C#のお話:
@@ -23,8 +26,47 @@ public class C01_PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        playerCameraPosition_1stPerson();
+        setTargetEnemy();
+        leftClickAction();
+        if (moveType)
+        {
+            playerCameraPosition_1stPerson();
+        }else
+        {
+            playerCameraPosition_3rdPerson();
+        }
+        
 	}
+
+    private void setTargetEnemy()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //クリックした位置から真っ直ぐ奥に行く光線
+        RaycastHit hitInfo;
+
+        if(Physics.Raycast(ray, out hitInfo, 10))// カメラから距離10の光線を出し、もし何かに当たったら
+        {
+            if(hitInfo.collider.gameObject.tag == "Enemy")// その当たったオブジェクトのタグ名が Enemy なら
+            {
+                targetEnemy = hitInfo.collider.gameObject;// 当たったオブジェクトを参照
+                return;// ターゲットが見つかったので処理を抜ける
+            }
+        }
+
+        targetEnemy = null;
+    }
+
+    private void leftClickAction()
+    {
+        if (Input.GetMouseButton(0) && targetEnemy != null)//もし左クリックを押され、かつ敵がnullでなければ
+        {
+            Destroy(targetEnemy);//敵を削除
+        }
+    }
+
+    public void changeModeType(bool type)
+    {
+        moveType = type;
+    }
     
     private void playerCameraPosition_1stPerson()
     {
