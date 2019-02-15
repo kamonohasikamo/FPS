@@ -6,6 +6,7 @@ public class C01_PlayerController : MonoBehaviour {
 
     private CharacterController charaController;//charaコンポーネント用変数
     private Vector3             move = Vector3.zero;        //chara移動量ベクトル
+	private Vector3				attackPoint;				//攻撃位置
     private float               speed = 5.0f;                 //スピード
     private const float         GRAVITY = 20.8f;         //重力定数
     private float               jumpPower = 15.0f;            //跳躍力
@@ -13,6 +14,7 @@ public class C01_PlayerController : MonoBehaviour {
     private bool moveType = true;
 
     public GameObject targetEnemy = null;
+	public GameObject prefab_hitEffect1; //攻撃時のヒットエフェクト
 
     /*
      * C#のお話:
@@ -37,7 +39,9 @@ public class C01_PlayerController : MonoBehaviour {
         }
         
 	}
-
+	//------------------------------
+	// ターゲット情報を取得
+	//------------------------------
     private void setTargetEnemy()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //クリックした位置から真っ直ぐ奥に行く光線
@@ -48,17 +52,22 @@ public class C01_PlayerController : MonoBehaviour {
             if(hitInfo.collider.gameObject.tag == "Enemy")// その当たったオブジェクトのタグ名が Enemy なら
             {
                 targetEnemy = hitInfo.collider.gameObject;// 当たったオブジェクトを参照
+				attackPoint = hitInfo.point;			//マウスの位置情報を取得
                 return;// ターゲットが見つかったので処理を抜ける
             }
         }
 
         targetEnemy = null;
     }
-
+	//------------------------------
+	//左クリックで敵を攻撃
+	//------------------------------
     private void leftClickAction()
     {
         if (Input.GetMouseButton(0) && targetEnemy != null)//もし左クリックを押され、かつ敵がnullでなければ
         {
+			GameObject effect = Instantiate(prefab_hitEffect1, attackPoint, Quaternion.identity) as GameObject; //エフェクト発生
+			Destroy(effect, 0.2f); //effect削除
             Destroy(targetEnemy);//敵を削除
         }
     }
