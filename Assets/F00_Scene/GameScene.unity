@@ -413,6 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02ae695de0fdf634fb14200d7e3ef37c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab_bom: {fileID: 1935123584802644, guid: b67e571eadcaa174cbbde07c5059d886, type: 2}
   targetEnemy: {fileID: 0}
   prefab_hitEffect1: {fileID: 100004, guid: 1cceb50d0661e1b469c9e1c681837a13, type: 2}
 --- !u!143 &722551329
