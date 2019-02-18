@@ -6,7 +6,7 @@ public class C01_PlayerController : MonoBehaviour {
 
   private CharacterController charaController;  //charaコンポーネント用変数
   private Vector3 move = Vector3.zero;          //chara移動量ベクトル
-	private Vector3	attackPoint;                  //攻撃位置
+  private Vector3	attackPoint;                  //攻撃位置
   private C11_Weapon weapon;                    //武器
   public GameObject prefab_bom;                 //ボム
   private float        speed = 5.0f;            //スピード
