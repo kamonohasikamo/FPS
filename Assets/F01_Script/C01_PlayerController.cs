@@ -8,16 +8,19 @@ public class C01_PlayerController : MonoBehaviour {
   private Vector3 move = Vector3.zero;          //chara移動量ベクトル
   private Vector3	attackPoint;                  //攻撃位置
   private C11_Weapon weapon;                    //武器
-  public GameObject prefab_bom;                 //ボム
   private float        speed = 5.0f;            //スピード
   private const float  GRAVITY = 20.8f;         //重力定数
   private float        jumpPower = 15.0f;       //跳躍力
   private float        rotationSpeed = 180.0f;  //Playerの回転速度
   private bool         moveType = true;         //一人称視点動作
+  private bool bomb_used = false;               // ボムの連射制限
+  private const int GUN_MAX_BULLETNUM = 20;     // 弾数最大値
 
+  public int gunBulletNum;                      //弾数
   public GameObject targetEnemy = null;         //ターゲット格納用変数
 	public GameObject prefab_hitEffect1;          //攻撃時のヒットエフェクト
-  private bool bomb_used = false;               // ボムの連射制限
+  public GameObject prefab_bom;                 //ボム
+
 
     /*
      * C#のお話:
@@ -29,12 +32,13 @@ public class C01_PlayerController : MonoBehaviour {
 	void Start () {
     charaController = GetComponent<CharacterController>();
     weapon = new C11_Weapon();  //C11_Weapon型のweaponの変数のメモリ領域を確保し、そこを参照せよ
+    gunBulletNum = GUN_MAX_BULLETNUM; // 弾数代入
 	}
 
 	// Update is called once per frame
 	void Update () {
     setTargetEnemy();
-    if(Input.GetMouseButtonDown(0)) {  //左クリックで攻撃
+    if(Input.GetMouseButton(0)) {  //左クリックで攻撃(長押しで連射)(あんまりよくないかも) -> GetMouseButtonDownで単発
       weaponAttack();
     }
     if(Input.GetMouseButtonDown(1)) {  //右クリックで武器切り替え
@@ -82,11 +86,26 @@ public class C01_PlayerController : MonoBehaviour {
   	// 銃の攻撃
   	//------------------------------
     private void attack01_gun() {
+      if (gunBulletNum <= 0) {
+        return; //残弾がないので
+      }
       if(targetEnemy != null) { //target(敵)が存在すれば
         GameObject effect = Instantiate(prefab_hitEffect1, attackPoint, Quaternion.identity) as GameObject; //エフェクト発生
         Destroy(effect, 0.2f); //effect削除
         Destroy(targetEnemy);  //敵削除
       }
+      gunBulletNum--;
+      if (gunBulletNum <= 0) {
+        StartCoroutine("reChargeGun");  //銃のコルーチン開始
+      }
+    }
+
+    //------------------------------
+    // 銃の使用制限コルーチン
+    //------------------------------
+    IEnumerator reChargeGun() {
+      yield return new WaitForSeconds(3.0f);  // 3.0s処理を待機
+      gunBulletNum = GUN_MAX_BULLETNUM;
     }
 
     //------------------------------
