@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class C12_Bom : MonoBehaviour {
 	public GameObject prefab_HitBombEffecf;
+	private C92_Sound c92Sound;
+	private int bomb_explosion_sound = 2;		// 投げた時の音No.
 
 	// Use this for initialization
 	void Start () {
+		c92Sound = GameObject.Find("Sound").GetComponent< C92_Sound >();
 		StartCoroutine("bom"); //コルーチン開始
 	}
 
@@ -19,6 +22,7 @@ public class C12_Bom : MonoBehaviour {
 		GameObject effect = Instantiate(prefab_HitBombEffecf, transform.position, Quaternion.identity) as GameObject; //ボムエフェクト発生
 		Destroy(effect, 1.0f); //ボムエフェクト1秒後削除
 
+		c92Sound.SendMessage("soundStart", bomb_explosion_sound); // ボム攻撃時の音
 		bombAttack();
 
 		Destroy(gameObject);

@@ -5,6 +5,7 @@ using UnityEngine;
 public class C01_PlayerController : MonoBehaviour {
 
   private CharacterController charaController;  //charaコンポーネント用変数
+  private C92_Sound c92Sound;
   private Vector3 move = Vector3.zero;          //chara移動量ベクトル
   private Vector3	attackPoint;                  //攻撃位置
   private C11_Weapon weapon;                    //武器
@@ -15,6 +16,8 @@ public class C01_PlayerController : MonoBehaviour {
   private bool         moveType = true;         //一人称視点動作
   private bool bomb_used = false;               // ボムの連射制限
   private const int GUN_MAX_BULLETNUM = 20;     // 弾数最大値
+  private int gun_sound = 0;                    // 銃撃音No
+  private int bomb_throw_sound = 1;             // ボム投げる音No
 
   public int gunBulletNum;                      //弾数
   public GameObject targetEnemy = null;         //ターゲット格納用変数
@@ -33,6 +36,7 @@ public class C01_PlayerController : MonoBehaviour {
     charaController = GetComponent<CharacterController>();
     weapon = new C11_Weapon();  //C11_Weapon型のweaponの変数のメモリ領域を確保し、そこを参照せよ
     gunBulletNum = GUN_MAX_BULLETNUM; // 弾数代入
+    c92Sound = GameObject.Find("Sound").GetComponent< C92_Sound >();
 	}
 
 	// Update is called once per frame
@@ -94,6 +98,9 @@ public class C01_PlayerController : MonoBehaviour {
         Destroy(effect, 0.2f); //effect削除
         Destroy(targetEnemy);  //敵削除
       }
+
+      c92Sound.SendMessage("soundStart", gun_sound);  // 音を鳴らす
+
       gunBulletNum--;
       if (gunBulletNum <= 0) {
         StartCoroutine("reChargeGun");  //銃のコルーチン開始
@@ -121,6 +128,8 @@ public class C01_PlayerController : MonoBehaviour {
         bom.GetComponent< Rigidbody >().velocity = bom_speed; //ボム速度を代入
 
         bom.GetComponent< Rigidbody >().angularVelocity = Vector3.forward * 7; //ボムの回転速度を代入
+
+        c92Sound.SendMessage("soundStart", bomb_throw_sound); // 音を鳴らす
 
         bomb_used = true;
         StartCoroutine("reChargeBomb");  // ボムの連射制限コルーチンを開始(数秒後、ボムを再び使用可にする)
