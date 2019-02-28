@@ -38,8 +38,9 @@ public class C01_PlayerController : MonoBehaviour {
     c93_UI = GameObject.Find("GameRoot").GetComponent< C93_UIText >();
     weapon = new C11_Weapon();  //C11_Weapon型のweaponの変数のメモリ領域を確保し、そこを参照せよ
     gunBulletNum = GUN_MAX_BULLETNUM; // 弾数代入
-    c93_UI.changeTextGunNum(gunBulletNum); // 残弾数を表示させる
+    // c93_UI.changeTextGunNum(gunBulletNum); // 下記のinitialize()に集約するため、削除
     c92_Sound = GameObject.Find("Sound").GetComponent< C92_Sound >();
+    c93_UI.initialize(weapon.getWeaponType() , gunBulletNum , bomb_used);	// テキストの初期化
 	}
 
 	// Update is called once per frame
@@ -136,8 +137,9 @@ public class C01_PlayerController : MonoBehaviour {
 
         c92_Sound.SendMessage("soundStart", bomb_throw_sound); // 音を鳴らす
 
-        bomb_used = true;
-        StartCoroutine("reChargeBomb");  // ボムの連射制限コルーチンを開始(数秒後、ボムを再び使用可にする)
+        bomb_used = true;                 // 手榴弾を使用不可能にする
+        c93_UI.changeTextBomb(bomb_used); // 手榴弾のテキスト変更
+        StartCoroutine("reChargeBomb");   // ボムの連射制限コルーチンを開始(数秒後、ボムを再び使用可にする)
       }
     }
 
@@ -147,6 +149,7 @@ public class C01_PlayerController : MonoBehaviour {
     IEnumerator reChargeBomb() {
       yield return new WaitForSeconds(2.5f);  // 2.5s処理を待機
       bomb_used = false;
+      c93_UI.changeTextBomb(bomb_used);		// 手榴弾のテキスト変更
     }
 
     //------------------------------
@@ -154,6 +157,8 @@ public class C01_PlayerController : MonoBehaviour {
     //------------------------------
     private void changeWeaponMode() {
       weapon.changeWeapon();
+      c93_UI.changeWeaponTypeRawImage(weapon.getWeaponType());    // 武器画像を変更
+      c93_UI.isChangeText(weapon.getWeaponType());                // 武器テキスト表示切替
     }
 
     //------------------------------
