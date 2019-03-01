@@ -8,8 +8,14 @@ public class C93_UIText : MonoBehaviour {
 	public Text textBomb;									// ボムの表示用
 	public RawImage weaponTypeRawImage;		// 武器画像を表示させるRawImageオブジェクト格納用
 	public Texture[] textureWeapon;				// 武器画像
+	private Animator animatorTextBomb;		// textBombオブジェクトが持っているAnimatorコンポーネントを操作する変数
 
-
+	//------------------------------------------
+	// Start()関数よりも先に実行される初期化関数
+	//------------------------------------------
+	void Awake() {
+		animatorTextBomb = GameObject.Find("BombNumTextFront").GetComponent< Animator >();
+	}
 	//-----------------------
 	// 残弾数を変更する(Text)
 	//-----------------------
@@ -27,6 +33,7 @@ public class C93_UIText : MonoBehaviour {
 	public void changeTextBomb(bool used) {
 		if (textBomb != null) {
 			textBomb.text = used ? "装填中" : "使用可";		// 条件分岐
+			animatorTextBomb.SetBool("isUsed", used);		 // bool型の変数"isUsed"に、usedの値に変更.
 		}
 	}
 
