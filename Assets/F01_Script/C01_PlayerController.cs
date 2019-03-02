@@ -19,6 +19,7 @@ public class C01_PlayerController : MonoBehaviour {
   private const int GUN_MAX_BULLETNUM = 20;     // 弾数最大値
   private int gun_sound = 0;                    // 銃撃音No
   private int bomb_throw_sound = 1;             // ボム投げる音No
+  private bool isButton = false;                // ボタン上に指がある場合は攻撃無効化
 
   public int gunBulletNum;                      //弾数
   public GameObject targetEnemy = null;         //ターゲット格納用変数
@@ -46,7 +47,7 @@ public class C01_PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
     setTargetEnemy();
-    if(Input.GetMouseButtonDown(0)) {  //左クリックで攻撃(長押しで連射)(あんまりよくないかも) -> GetMouseButtonDownで単発
+    if(Input.GetMouseButtonDown(0) && !isButton) {  //左クリックで攻撃(長押しで連射)(あんまりよくないかも) -> GetMouseButtonDownで単発
       weaponAttack();
     }
     if(Input.GetMouseButtonDown(1)) {  //右クリックで武器切り替え
@@ -59,6 +60,14 @@ public class C01_PlayerController : MonoBehaviour {
     }
 
 	}
+
+  //------------------------------
+  // setIsButton
+  //------------------------------
+  public void setIsButton(bool button) {
+    isButton = button;
+  }
+
 	//------------------------------
 	// ターゲット情報を取得
 	//------------------------------
@@ -155,7 +164,7 @@ public class C01_PlayerController : MonoBehaviour {
     //------------------------------
     // 武器変更
     //------------------------------
-    private void changeWeaponMode() {
+    public void changeWeaponMode() {
       weapon.changeWeapon();
       c93_UI.changeWeaponTypeRawImage(weapon.getWeaponType());    // 武器画像を変更
       c93_UI.isChangeText(weapon.getWeaponType());                // 武器テキスト表示切替
