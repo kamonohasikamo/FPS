@@ -276,6 +276,7 @@ GameObject:
   - component: {fileID: 215578776}
   - component: {fileID: 215578775}
   - component: {fileID: 215578777}
+  - component: {fileID: 215578778}
   m_Layer: 0
   m_Name: GameRoot
   m_TagString: Untagged
@@ -326,6 +327,20 @@ MonoBehaviour:
   textureWeapon:
   - {fileID: 2800000, guid: f11060c7052bfc043b9ce8a95c0e841c, type: 3}
   - {fileID: 2800000, guid: 4e3ae1857b63fe046a8be23207be95b8, type: 3}
+--- !u!114 &215578778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 215578774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f57d25a5e7c4b0b45ab05467b73e411c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab_BLOCK:
+  - {fileID: 1472366375667636, guid: 9aa0696b91175e4409323e3ffaa76617, type: 2}
+  - {fileID: 1645472839638080, guid: 871bf065bc274a943b39dd1890578fe5, type: 2}
 --- !u!1001 &270584829
 Prefab:
   m_ObjectHideFlags: 0
@@ -806,7 +821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &779239790
 MeshRenderer:
   m_ObjectHideFlags: 0
