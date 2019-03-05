@@ -8,9 +8,17 @@ public class C03_MapCreate : MonoBehaviour {
 	private	int						MAP_SIZE_X	= 10;											// マップ横Xサイズ
 	private	int						MAP_SIZE_Z	= 10;											// マップ奥行きZサイズ
 	private	Vector3				BLOCK_SIZE	= new Vector3(4, 4, 4);		// ブロックの縦横奥行きサイズ
+	private GameObject		block_folder;													// 作成したブロック格納用
 
-	// Use this for initialization
+	//------------------------------------------
+	// Start()関数よりも先に実行される初期化関数
+	//------------------------------------------
 	void Awake () {
+		block_folder = new GameObject();
+		block_folder.name = "BLOCK_Folder";
+	}
+	// Use this for initialization
+	void Start () {
 		setBlockInMap();	// 初期ブロック配置
 	}
 
@@ -32,6 +40,9 @@ public class C03_MapCreate : MonoBehaviour {
 					prefab_BLOCK[blockXNum] ,
 					block_position ,
 					Quaternion.identity) as GameObject;		// プレハブ作成
+
+					block.name = "BLOCK[" + x + "," + z + "]";
+					block.transform.parent = block_folder.transform;
 
 				map_BLOCK[x,z] = block;						// 作成したブロックを、マップ配列に格納
 
