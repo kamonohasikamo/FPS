@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab_BLOCK:
-  - {fileID: 1472366375667636, guid: 9aa0696b91175e4409323e3ffaa76617, type: 2}
+  - {fileID: 1760790349720224, guid: 9aa0696b91175e4409323e3ffaa76617, type: 2}
   - {fileID: 1645472839638080, guid: 871bf065bc274a943b39dd1890578fe5, type: 2}
 --- !u!1001 &270584829
 Prefab:
