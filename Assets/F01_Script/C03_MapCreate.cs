@@ -20,18 +20,24 @@ public class C03_MapCreate : MonoBehaviour {
 	private int						MAP_HARFSIZE_Z;
 	private	Vector3				BLOCK_SIZE	= new Vector3(4, 4, 4);		// ブロックの縦横奥行きサイズ
 	private GameObject		block_folder;													// 作成したブロック格納用
-
-	void Awake(){
-		block_folder = new GameObject();				// 作成したブロックを入れるフォルダー(空オブジェクト)を作成
-		block_folder.name = "BLOCK_Folder";						// 名前を変更.
-	}
+	private GameObject		item_folder;													// 作成したアイテム格納用
+	public GameObject[]		prefab_ITEM;													// アイテムのぷれふぁぶ配列
+	private GameObject[,]	map_ITEM;															// マップに配置した各種アイテム
+	private Vector3				WALL_SIZE = new Vector3(4, 8, 4);			// 壁のサイズ指定
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player");	// playerObjectを探す
 
+		block_folder = new GameObject();				// 作成したブロックを入れるフォルダー(空オブジェクト)を作成
+		block_folder.name = "BLOCK_Folder";						// 名前を変更
+
+		item_folder = new GameObject();					// 作成したアイテムを入れるフォルダー(空オブジェクト)を作成
+		item_folder.name = "ITEM_folder";							// 名前を変更
+
 		mapSizeCrrection();	// mapSizeSetting
 		setBlockInMap();	// 初期ブロック配置
+		setItemInMap();		// 初期アイテム配置
 		setPlayerInMap();	// PlayerStartSetting
 	}
 
@@ -83,6 +89,38 @@ public class C03_MapCreate : MonoBehaviour {
 	}
 
 	//------------------------------
+	// 初期アイテム配置
+	//------------------------------
+	void setItemInMap() {
+		map_ITEM = new GameObject[MAP_SIZE_X, MAP_SIZE_Z];	// MAP_SIZE分の配列を用意
+
+		// 左右に壁を作成する処理
+		for (int z = 0; z < MAP_SIZE_Z; z++) {
+			for (int x = 0; x < MAP_SIZE_X; x++) {
+				if (x != 0 && x != MAP_SIZE_X - 1) {	// 両端は処理しない
+					continue;
+				}
+
+				Vector3 wallPosition = new Vector3(
+					WALL_SIZE.x * x,
+					WALL_SIZE.y / 2,
+					WALL_SIZE.z * z
+				);
+				GameObject wall = Instantiate( // ぷれふぁぶの作成
+					prefab_ITEM[0],
+					wallPosition,
+					Quaternion.identity
+				) as GameObject;
+
+				wall.name = "ITEM[" + x + "," + 0 + "]_WALL";
+				wall.transform.parent = item_folder.transform;
+
+				map_ITEM[x, z] = wall;
+			}
+		}
+	}
+
+	//------------------------------
 	// 初期プレイヤー位置設定
 	//------------------------------
 	void setPlayerInMap() {
@@ -97,6 +135,7 @@ public class C03_MapCreate : MonoBehaviour {
 	}
 
 	private void renewalBLOCKInMap(BLOCK_Pos_XZ change_pos) {
+		/*
 		// 列方向のブロック削除・作成
 		if (change_pos.x != 0) {
 			int newBLOCK_posX = position_now.x;
@@ -138,6 +177,7 @@ public class C03_MapCreate : MonoBehaviour {
 				n = (n + 1) % prefab_BLOCK.Length;
 			}
 		}
+		*/
 
 		// 行方向についてのブロック削除・生成
 		if(change_pos.z != 0){
@@ -175,11 +215,34 @@ public class C03_MapCreate : MonoBehaviour {
 				) as GameObject;		// プレハブ作成
 
 				block.name = "BLOCK[" + (x + map_x) % MAP_SIZE_X + "," + z + "]";// 作成したブロックの名前変更
-				block.transform.parent = block_folder.transform;// 作成したブロックの親、フォルダーにする
+				block.transform.parent = block_folder.transform;  // 作成したブロックの親をフォルダーにする
 
-				map_BLOCK[(x + map_x) % MAP_SIZE_X, z] = block;// 作成したブロックを、マップ配列に格納
+				map_BLOCK[(x + map_x) % MAP_SIZE_X, z] = block;  // 作成したブロックを、マップ配列に格納
 
-				n = (n + 1) % prefab_BLOCK.Length;// 次に作るブロックの番号
+				n = (n + 1) % prefab_BLOCK.Length;  // 次に作るブロックの番号
+
+				// 壁に関する処理
+				if (x != 0 && x != MAP_SIZE_X - 1) { // 端っこ以外は関係なし
+					continue;
+				}
+
+				Destroy(map_ITEM[(x + map_x) % MAP_SIZE_X, z].gameObject); // 配列の中に入っているアイテム削除
+
+				Vector3 wallPosition = new Vector3(
+					WALL_SIZE.x * (newBLOCK_posX + x),
+					WALL_SIZE.y / 2,
+					WALL_SIZE.z * newBLOCK_posZ
+				);
+				GameObject wall = Instantiate(
+					prefab_ITEM[0],
+					wallPosition,
+					Quaternion.identity
+				) as GameObject;		// プレハブ作成
+
+				wall.name = "ITEM[" + (x + map_x) % MAP_SIZE_X + "," + z + "]_WALL";
+				wall.transform.parent = item_folder.transform; // 作成したアイテムの親をフォルダーにする
+
+				map_ITEM[(x + map_x) % MAP_SIZE_X, z] = wall;	// 作成したアイテムをマップ配列に格納　->　マップに配置
 			}
 		}
 	}
@@ -188,14 +251,19 @@ public class C03_MapCreate : MonoBehaviour {
 	// プレイヤー座標を取得し、前回座標との差分を返す
 	//---------------------------------------------------
 	private BLOCK_Pos_XZ getPlayerPosition() {
-		BLOCK_Pos_XZ ret_pos;								// 差分用
+		BLOCK_Pos_XZ ret_pos;	// 差分用
 
-		position_before = position_now;						// 前回座標を取得
-		position_now.x = Mathf.FloorToInt((player.transform.position.x + BLOCK_SIZE.x/2) / BLOCK_SIZE.x);	// 現在座標Xを取得
-		position_now.z = Mathf.FloorToInt((player.transform.position.z + BLOCK_SIZE.z/2) / BLOCK_SIZE.z);	// 現在座標Zを取得
+		position_before = position_now;		// 前回座標を取得
+		position_now.x = MAP_HARFSIZE_X;	// 現在座標Xは常に中央
+		position_now.z = Mathf.FloorToInt((player.transform.position.z + BLOCK_SIZE.z / 2) / BLOCK_SIZE.z);	// 現在座標Zを取得
 
-		ret_pos.x = position_now.x - position_before.x;		// Xの座標差分を取得
+		ret_pos.x = 0;		// Xの座標は常に0
 		ret_pos.z = position_now.z - position_before.z;		// Zの座標差分を取得
+
+		if (ret_pos.z < 0) {	// Zの座標差分がマイナスなら、現在座標zは前回と同じまま、zの座標差分は無しとする
+			position_now.z = position_before.z;
+			ret_pos.z = 0;
+		}
 
 		return ret_pos;			// 差分を返す.
 	}
