@@ -4,10 +4,14 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-/// <summary>
+//=====================================================
 /// ジョイスティック
-/// </summary>
+//=====================================================
 public class Joystick : Graphic, IPointerDownHandler, IPointerUpHandler, IEndDragHandler, IDragHandler {
+  /*
+    [SerializeField] <- これをやると、Inspectorに表示させることができるやつらしい
+    [Header("文字列")] <- これをやると、"文字列"で指定した文字列をヘッダにできるっぽい
+  */
 
   //実際に動くスティック部分
   [SerializeField][Header("実際に動くスティック部分(自動設定)")]
@@ -39,7 +43,7 @@ public class Joystick : Graphic, IPointerDownHandler, IPointerUpHandler, IEndDra
   }
 
   //=================================================================================
-  //初期化
+  // 以下、初期化の処理
   //=================================================================================
 
   protected override void Awake (){
@@ -93,7 +97,7 @@ public class Joystick : Graphic, IPointerDownHandler, IPointerUpHandler, IEndDra
   }
 
   //=================================================================================
-  //タップ
+  // 以下、タップの処理
   //=================================================================================
 
   //タップ開始時
@@ -109,7 +113,7 @@ public class Joystick : Graphic, IPointerDownHandler, IPointerUpHandler, IEndDra
   }
 
   //=================================================================================
-  //ドラッグ
+  // 以下、ドラッグの処理
   //=================================================================================
 
   //ドラッグ終了時
@@ -150,7 +154,7 @@ public class Joystick : Graphic, IPointerDownHandler, IPointerUpHandler, IEndDra
   }
 
   //=================================================================================
-  //更新
+  // 以下、更新の処理
   //=================================================================================
 
   #if UNITY_EDITOR

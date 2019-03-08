@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 
-/// <summary>
+//==================================================
 /// JoystickのInspectorを変えるエディター
-/// </summary>
+//==================================================
 [CustomEditor(typeof(Joystick))]
 public class JoystickEditor : Editor {
 
@@ -14,7 +14,7 @@ public class JoystickEditor : Editor {
   private SerializedProperty _positionProperty;
 
   //=================================================================================
-  //初期化
+  // 以下、初期化の処理
   //=================================================================================
 
   private void OnEnable(){
@@ -25,7 +25,7 @@ public class JoystickEditor : Editor {
   }
 
   //=================================================================================
-  //更新
+  // 以下、更新の処理
   //=================================================================================
 
   //Inspectorを更新する
