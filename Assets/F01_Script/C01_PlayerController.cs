@@ -26,6 +26,11 @@ public class C01_PlayerController : MonoBehaviour {
 	public GameObject prefab_hitEffect1;          //攻撃時のヒットエフェクト
   public GameObject prefab_bom;                 //ボム
 
+  /*iOS用のフリック判定：あまり良くないけどpublicにしておきます*/
+  public Vector3 touchStartPosition;            // タップし始めた時の座標
+  public Vector3 touchEndPosition;              // 指を離したときの座標
+  public string Direction;                      // log用
+
 
     /*
      * C#のお話:
@@ -47,19 +52,105 @@ public class C01_PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
     setTargetEnemy();
-    if(Input.GetMouseButtonDown(0) && !isButton) {  //左クリックで攻撃(長押しで連射)(あんまりよくないかも) -> GetMouseButtonDownで単発
-      weaponAttack();
-    }
-    if(Input.GetMouseButtonDown(1)) {  //右クリックで武器切り替え
-      changeWeaponMode();
-    }
-    if (moveType) {
-      playerCameraPosition_1stPerson();
-    } else {
-      playerCameraPosition_3rdPerson();
-    }
+    // if(Input.GetMouseButtonDown(0) && !isButton) {  //左クリックで攻撃(長押しで連射)(あんまりよくないかも) -> GetMouseButtonDownで単発
+    //   weaponAttack();
+    // }
+    // if(Input.GetMouseButtonDown(1)) {  //右クリックで武器切り替え
+    //   changeWeaponMode();
+    // }
+    // if (moveType) {
+    //   playerCameraPosition_1stPerson();
+    // } else {
+    //   playerCameraPosition_3rdPerson();
+    // }
+    Flick();
 
 	}
+
+  //------------------------------
+  // Flick
+  //------------------------------
+  void Flick() {
+    if (Input.GetKeyDown(KeyCode.Mouse0)) {
+      touchStartPosition
+      = new Vector3 (
+        Input.mousePosition.x,
+        Input.mousePosition.y,
+        Input.mousePosition.z
+      );
+    }
+
+    if (Input.GetKeyUp(KeyCode.Mouse0)) {
+      touchEndPosition
+      = new Vector3 (
+        Input.mousePosition.x,
+        Input.mousePosition.y,
+        Input.mousePosition.z
+      );
+      GetDirection();
+    }
+  }
+
+  //------------------------------
+  // GetDirection
+  //------------------------------
+  void GetDirection () {
+    float direction_x = touchEndPosition.x - touchStartPosition.x;
+    float direction_y = touchEndPosition.y - touchStartPosition.y;
+
+    // xがyより(絶対値が)大きいとき、左右と判定
+    if (Mathf.Abs (direction_y) < Mathf.Abs (direction_x)) {
+			if (30 < direction_x) {
+				//右向きにフリック
+				Direction = "right";
+
+			}
+			if (-30 > direction_x) {
+				//左向きにフリック
+				Direction = "left";
+			}
+			//yがxより(絶対値が)大きいとき、上下と判定
+		} else if (Mathf.Abs (direction_x) < Mathf.Abs (direction_y)) {
+			if (30 < direction_y) {
+				//上向きにフリック
+				Direction = "up";
+			}
+			if (-30 > direction_y) {
+				//下向きのフリック
+				Direction = "down";
+			}
+		} else {
+			//タッチを検出
+			Direction = "touch";
+		}
+		switch (Direction) {
+		case "up":
+			//上フリックされた時の処理
+      Debug.Log(Direction);
+			break;
+
+		case "down":
+			//下フリックされた時の処理
+      Debug.Log(Direction);
+			break;
+
+		case "right":
+			//右フリックされた時の処理
+      Debug.Log(Direction);
+			break;
+
+		case "left":
+			//左フリックされた時の処理
+      Debug.Log(Direction);
+			break;
+
+		case "touch":
+			//タッチされた時の処理
+      Debug.Log(Direction);
+			break;
+    }
+
+  }
 
   //------------------------------
   // setIsButton
