@@ -188,10 +188,8 @@ public class C01_PlayerController : MonoBehaviour {
 
         //ジャンプ&重力処理
         move.y += y;                                            //move.yの値を戻す
-        if (charaController.isGrounded)                         //地面に足がついているかどうか
-        {
-            if (Input.GetKeyDown(KeyCode.Space))                    //Spaceが押されたら跳躍力分上にあげる
-            {
+        if (charaController.isGrounded) {                       //地面に足がついているかどうか
+            if (Input.GetKeyDown(KeyCode.Space)) {              //Spaceが押されたら跳躍力分上にあげる
                 move.y = jumpPower;
             }
         }
@@ -200,8 +198,7 @@ public class C01_PlayerController : MonoBehaviour {
         //playerの向き判定等
         Vector3 playerDir = new Vector3(Input.GetAxis("Horizontal"), 0.0f,0.0f);
         playerDir = transform.TransformDirection(playerDir);
-        if (playerDir.magnitude > 0.1f)
-        {
+        if (playerDir.magnitude > 0.1f) {
             Quaternion q = Quaternion.LookRotation(playerDir);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, q, rotationSpeed * Time.deltaTime);
         }
@@ -211,8 +208,7 @@ public class C01_PlayerController : MonoBehaviour {
     //------------------------------
     // 三人称視点
     //------------------------------
-    private void playerCameraPosition_3rdPerson()
-    {
+    private void playerCameraPosition_3rdPerson() {
         //移動量
         float y = move.y;
         move = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
@@ -221,18 +217,15 @@ public class C01_PlayerController : MonoBehaviour {
 
         //ジャンプ&重力処理
         move.y += y;                                            //move.yの値を戻す
-        if (charaController.isGrounded)                         //地面に足がついているかどうか
-        {
-            if (Input.GetKeyDown(KeyCode.Space))                    //Spaceが押されたら跳躍力分上にあげる
-            {
+        if (charaController.isGrounded) {                       //地面に足がついているかどうか
+            if (Input.GetKeyDown(KeyCode.Space)) {              //Spaceが押されたら跳躍力分上にあげる
                 move.y = jumpPower;
             }
         }
         move.y = move.y - (GRAVITY * Time.deltaTime);           //y軸方向に重力を追加(代入)
 
         //playerの向き判定等
-        if (playerDir.magnitude > 0.1f)
-        {
+        if (playerDir.magnitude > 0.1f) {
             Quaternion q = Quaternion.LookRotation(playerDir);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, q, rotationSpeed * Time.deltaTime);
         }

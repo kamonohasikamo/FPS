@@ -55,7 +55,7 @@ public class C23_MapArray {
 	// 配列に格納
 	//---------------------------------------
 	protected void cleateObject(GameObject prefab, C22_MapAxis.Axis_XZ arg) {
-		cleateObject(prefab , arg.x , arg.z);
+		cleateObject(prefab, arg.x, arg.z);
 	}
 
 	protected void cleateObject(GameObject prefab, int x, int z) {
@@ -86,7 +86,7 @@ public class MapArrayBlock : C23_MapArray {
 	//---------------------------------------
 	// constructor
 	//---------------------------------------
-	public MapArrayBlock (GameObject[] obj , string name , C21_MapSize size , C22_MapAxis axis) : base(name , size , axis){
+	public MapArrayBlock (GameObject[] obj, string name, C21_MapSize size, C22_MapAxis axis) : base(name, size, axis){
 		this.block = obj;		// 引数で受け渡された変数を参照する様に設定。
 		this.SIGN = -1;			// 床側なので、符合をマイナスに。
 	}
@@ -144,9 +144,9 @@ public class MapArrayBlock : C23_MapArray {
 
 			if(block.Length != 0){
 				int n;	// 床タイプ番号
-				for (int z=0 ; z< size.getMapSizeZ() ; z++) {
-					n = getInt_BlockType(posAxis.x , z+posAxis.z);			// 床タイプ番号を取得
-					cleateObject(block[n] , posAxis.x , z+posAxis.z);		// オブジェクト作成
+				for (int z = 0; z< size.getMapSizeZ(); z++) {
+					n = getInt_BlockType(posAxis.x, z + posAxis.z);			// 床タイプ番号を取得
+					cleateObject(block[n], posAxis.x, z + posAxis.z);		// オブジェクト作成
 				}
 			}else{
 				return;		// 配列の中身が無い場合は、何もせず抜ける
@@ -166,8 +166,8 @@ public class MapArrayBlock : C23_MapArray {
 			if(block.Length != 0){
 				int n;	// 床タイプ番号
 				for (int x = 0; x < size.getMapSizeX(); x++) {
-					n = getInt_BlockType(x+posAxis.x , posAxis.z);			// 床タイプ番号を取得
-					cleateObject(block[n] , x+posAxis.x , posAxis.z);		// オブジェクト作成
+					n = getInt_BlockType(x + posAxis.x, posAxis.z);			// 床タイプ番号を取得
+					cleateObject(block[n], x + posAxis.x, posAxis.z);		// オブジェクト作成
 				}
 			}else{
 				return;		// 配列の中身が無い場合は、何もせず抜ける
@@ -182,11 +182,20 @@ public class MapArrayBlock : C23_MapArray {
 public class MapArrayFloor : C23_MapArray{
 	private GameObject[] wall;		// 壁オブジェクトの参照用
 
+	private GameObject[] obstacle;		// 障害物オブジェクト格納用配列
+
 	//---------------------------------------
 	// constructor
 	//---------------------------------------
-	public MapArrayFloor (string name, C21_MapSize size, C22_MapAxis axis) : base(name , size , axis){
+	public MapArrayFloor (string name, C21_MapSize size, C22_MapAxis axis) : base(name, size, axis) {
 
+	}
+
+	//---------------------------------------
+	// 障害物オブジェクトのセット
+	//---------------------------------------
+	public void setObstacle(GameObject[] obj) {
+		obstacle = obj;
 	}
 
 	//---------------------------------------
@@ -200,7 +209,7 @@ public class MapArrayFloor : C23_MapArray{
 	// スタート時のマップ(地上)作成
 	//---------------------------------------
 	public void startMap_Create(){
-		for (int z=0 ; z< size.getMapSizeZ() ; z++) {
+		for (int z = 0; z< size.getMapSizeZ(); z++) {
 			cleateObject(wall[0], axis.getAxisMapStartX(), z);					// 0列目に壁オブジェクト作成
 			cleateObject(wall[0], axis.getAxisMapEndX(), z);		// (マップサイズ－１)列目に壁オブジェクト作成
 		}
@@ -210,7 +219,8 @@ public class MapArrayFloor : C23_MapArray{
 	// マップ(地上)の更新
 	//---------------------------------------
 	public void renewal(){
-		renewal_wallZ();	// 行方向のマップ(壁)の更新
+		renewal_wallZ();			// 行方向のマップ(壁)の更新
+		randomSetObstacleZ();	// 行方向のマップ(障害物)の更新
 	}
 
 	//---------------------------------------
@@ -220,11 +230,32 @@ public class MapArrayFloor : C23_MapArray{
 		if(axis.getDifferenceAxis().z != 0){		// 位置座標の差分Zが０で無いなら
 			if(wall.Length != 0){
 				int z = (axis.getDifferenceAxis().z > 0) ? axis.getAxisMapEndZ() : axis.getAxisMapStartZ(); // Zはマップ端　（現在位置±半マップサイズ）
-				cleateObject(wall[0] , axis.getAxisMapStartX() , z);		// オブジェクト作成
-				cleateObject(wall[0] , axis.getAxisMapEndX() , z);		// オブジェクト作成
-			}else{
+				cleateObject(wall[0], axis.getAxisMapStartX(), z);		// オブジェクト作成
+				cleateObject(wall[0], axis.getAxisMapEndX(), z);		// オブジェクト作成
+			} else {
 				return;		// 配列の中身が無い場合は、何もせず抜ける
 			}
+		}
+	}
+
+	//---------------------------------------
+	// 行方向のマップ(障害物)更新
+	//---------------------------------------
+	private void randomSetObstacleZ() {
+		if (axis.getDifferenceAxis().z > 0) { 	// 位置座標の差分Zがプラスなら
+			C22_MapAxis.Axis_XZ posAxis;					// 位置座標の始点
+			posAxis.x = axis.getAxisMapStartX();	// 始点Xはマップ始端（現在位置－半マップサイズ）
+			posAxis.z = axis.getAxisMapEndZ();		// Zはマップ終端　（現在位置＋半マップサイズ）
+
+			if (obstacle.Length != 0) {
+				for (int x = 1; x < size.getMapSizeX() - 1; x++) {
+					if (Random.Range(0, 100) < 30) {	// ランダム値0～99で30以下なら、壁を生成
+						cleateObject(obstacle[0], x + posAxis.x, posAxis.z); // 壁
+					}
+				}
+			}
+		} else {
+			return;	// 配列の中身がない場合は何もせずに抜ける
 		}
 	}
 }
