@@ -25,7 +25,8 @@ public class C03_MapCreate : MonoBehaviour {
 		mapBlock	= new MapArrayBlock(prefab_Block, "BLOCK", size, playerAxis);	// 地面用MapArrayクラスのインスタンス生成
 		mapFloor	= new MapArrayFloor("FLoor", size, playerAxis);	// 地上用MapArrayクラスのインスタンス生成
 
-		mapFloor.setWall(prefab_WALL);
+		mapFloor.setWall(prefab_WALL);			// 壁オブジェクトを渡す
+		mapFloor.setObstacle(prefab_WALL);	// 障害物用に壁オブジェクトを渡す
 
 		initialize();			// プレイヤー位置／マップ初期化
 	}
