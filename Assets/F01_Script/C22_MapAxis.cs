@@ -64,7 +64,7 @@ public class C22_MapAxis {
   //--------------------------------
 	// playerの現在xz座標を取得
 	//--------------------------------
-	private void getNowAxis() {
+	public void getNowAxis() {
     nowAxis.x = Mathf.FloorToInt((player.transform.position.x + scale.x / 2) / scale.x); // (現在位置+ブロック幅/2) / ブロック幅
 		nowAxis.z = Mathf.FloorToInt((player.transform.position.z + scale.z / 2) / scale.z); // (現在位置+ブロック幅/2) / ブロック幅
 	}
@@ -126,5 +126,11 @@ public class C22_MapAxis {
     return nowAxis.z + size.getMapHalfSizeZ();
   }
 
+  //---------------------------------
+  // playerの現在の座標を返す
+  //---------------------------------
+  public Axis_XZ getNowAxis_XZ() {
+    return nowAxis;
+  }
 
 }
