@@ -64,6 +64,7 @@ public class C23_MapArray {
 
 		if (array[array_x, array_z] != null) {
 			MonoBehaviour.Destroy(array[array_x, array_z].gameObject); // 配列内にオブジェクトが格納されていたら、削除する
+			array[array_x, array_z] = null; // 削除したら中身は空っぽにする
 		}
 
 		Vector3 scale 					= prefab.transform.localScale; // 受け渡されたオブジェクトのサイズを格納
@@ -72,7 +73,23 @@ public class C23_MapArray {
 		obj.name								= name + "[" + array_x + "," + array_z + "]";		// 作成したオブジェクトの名前変更
 		obj.transform.parent		= folder.transform;						// 作成したオブジェクトの親を、フォルダーにする
 		array[array_x, array_z]	= obj;
+	}
 
+	//---------------------------------------
+	// 指定された位置座標のオブジェクトを削除
+	// 配列に格納されている値の削除
+	//---------------------------------------
+	protected void deleteObject(C22_MapAxis.Axis_XZ arg) {
+		deleteObject(arg.x, arg.z);
+	}
+
+	protected void deleteObject(int x, int z) {
+		int array_x = getArrayNumX(x);
+		int array_z = getArrayNumZ(z);
+		if (array[array_x, array_z] != null) { //配列内にオブジェクトが格納されていたら削除
+			MonoBehaviour.Destroy(array[array_x, array_z].gameObject);
+			array[array_x, array_z] = null;
+		}
 	}
 }
 
@@ -251,6 +268,8 @@ public class MapArrayFloor : C23_MapArray{
 				for (int x = 1; x < size.getMapSizeX() - 1; x++) {
 					if (Random.Range(0, 100) < 30) {	// ランダム値0～99で30以下なら、壁を生成
 						cleateObject(obstacle[0], x + posAxis.x, posAxis.z); // 壁
+					} else {
+						deleteObject(x + posAxis.x, posAxis.z); // objectの削除
 					}
 				}
 			}
