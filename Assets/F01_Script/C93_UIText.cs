@@ -9,6 +9,8 @@ public class C93_UIText : MonoBehaviour {
 	public RawImage weaponTypeRawImage;		// 武器画像を表示させるRawImageオブジェクト格納用
 	public Texture[] textureWeapon;				// 武器画像
 	private Animator animatorTextBomb;		// textBombオブジェクトが持っているAnimatorコンポーネントを操作する変数
+	public Text textPlayerHP;							// PlayerのHP表示用
+	private C13_Status playerStatus;			// Playerのstatus参照用
 
 	//------------------------------------------
 	// Start()関数よりも先に実行される初期化関数
@@ -69,13 +71,25 @@ public class C93_UIText : MonoBehaviour {
 		weaponTypeRawImage.texture = textureWeapon[weaponNo];		// 画像変更
 	}
 
-	//------------------
+
+	//---------------------------------------------------------------
 	// テキスト初期化用
-	//------------------
-	public void initialize(int type ,int num , bool used){
+	//---------------------------------------------------------------
+	public void changeTextPlayerHP() {
+		if (textPlayerHP != null) {
+			textPlayerHP.text = "体力：" + playerStatus.getHP();
+		}
+	}
+
+	//---------------------------------------------------------------
+	// テキスト初期化用
+	//---------------------------------------------------------------
+	public void initialize(int type, int num, bool used, C13_Status status){
 			isChangeText(type);	// 武器タイプによるテキストの表示オン／オフ
 
 			changeTextGunNum(num);		// 残弾数を変更
-			changeTextBomb(used);		// 手榴弾のテキスト変更
+			changeTextBomb(used);			// 手榴弾のテキスト変更
+			playerStatus = status;
+			changeTextPlayerHP();			// PlayerHPChange
 	}
 }

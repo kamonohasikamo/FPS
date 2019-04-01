@@ -302,7 +302,8 @@ public class MapArrayFloor : C23_MapArray{
 			if (obstacle.Length != 0) {
 				for (int x = 1; x < size.getMapSizeX() - 1; x++) {
 					if (Random.Range(0, 100) < 30) {	// ランダム値0～99で30以下なら、壁を生成
-						cleateObject(obstacle[0], x + posAxis.x, posAxis.z); // 壁
+						int randomize = Random.Range(0, obstacle.Length);
+						cleateObject(obstacle[randomize], x + posAxis.x, posAxis.z); // 壁
 					} else {
 						deleteObject(x + posAxis.x, posAxis.z); // objectの削除
 					}

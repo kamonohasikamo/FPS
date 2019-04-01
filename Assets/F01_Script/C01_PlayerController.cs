@@ -41,7 +41,7 @@ public class C01_PlayerController : MonoBehaviour {
     gunBulletNum = GUN_MAX_BULLETNUM; // 弾数代入
     // c93_UI.changeTextGunNum(gunBulletNum); // 下記のinitialize()に集約するため、削除
     c92_Sound = GameObject.Find("Sound").GetComponent< C92_Sound >();
-    c93_UI.initialize(weapon.getWeaponType() , gunBulletNum , bomb_used);	// テキストの初期化
+    c93_UI.initialize(weapon.getWeaponType(), gunBulletNum, bomb_used, GetComponent< C13_Status >());	// テキストの初期化
 	}
 
 	// Update is called once per frame
@@ -136,7 +136,7 @@ public class C01_PlayerController : MonoBehaviour {
     private void attack02_bom() {
       if (!bomb_used) {
         Vector3 pos = transform.position + transform.TransformDirection(Vector3.forward); // プレイヤー位置　+　プレイヤー正面にむけて１進んだ距離
-        GameObject bom = Instantiate(prefab_bom , pos , Quaternion.identity) as GameObject; //ボム作成
+        GameObject bom = Instantiate(prefab_bom, pos, Quaternion.identity) as GameObject; //ボム作成
 
         Vector3 bom_speed = transform.TransformDirection(Vector3.forward) * 5; // ボムの移動速度。『プレイヤー正面に向けての速度ベクトル』を５
         bom_speed += Vector3.up * 5; //ボムのz軸方向の速度を加算
@@ -168,6 +168,18 @@ public class C01_PlayerController : MonoBehaviour {
       weapon.changeWeapon();
       c93_UI.changeWeaponTypeRawImage(weapon.getWeaponType());    // 武器画像を変更
       c93_UI.isChangeText(weapon.getWeaponType());                // 武器テキスト表示切替
+    }
+
+    //---------------------------------------------------------------------
+    // CharacterControllerに何かが当たっているときに呼び出される関数
+    //---------------------------------------------------------------------
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+      if (hit.gameObject.tag == "DamageArea") {
+        if (hit.gameObject.GetComponent< C13_Status >()) { // 衝突した相手が C13_Status コンポーネントを持っているなら
+          GetComponent< C13_Status >().damage(hit.gameObject.GetComponent< C13_Status >()); // HPを減らす
+					c93_UI.changeTextPlayerHP();
+				}
+      }
     }
 
     //------------------------------
