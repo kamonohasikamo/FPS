@@ -12,6 +12,8 @@ public class C23_MapArray {
 	protected GameObject[,] array;		// マップオブジェクト格納用配列
 	protected C21_MapSize size;				// マップサイズへの参照用変数
 	protected C22_MapAxis axis;				// マップ座標への参照用変数
+	protected C22_MapAxis.Axis_XZ arrayAxis_Start;	//map始点の配列座標格納用
+	protected C22_MapAxis.Axis_XZ arrayAxis_End;		//map終点の配列座標格納用
 
 	protected int SIGN;								// 符号
 
@@ -31,7 +33,7 @@ public class C23_MapArray {
 	//---------------------------------------
 	// 位置座標Xを配列座標に変換して返す
 	//---------------------------------------
-	private int getArrayNumX(int value) {
+	protected int getArrayNumX(int value) {
 		int ret = value % size.getMapSizeX();
 		if (ret < 0) {
 			ret += size.getMapSizeX();
@@ -42,7 +44,7 @@ public class C23_MapArray {
 	//---------------------------------------
 	// 位置座標Zを配列座標に変換して返す
 	//---------------------------------------
-	private int getArrayNumZ(int value) {
+	protected int getArrayNumZ(int value) {
 		int ret = value % size.getMapSizeZ();
 		if (ret < 0) {
 			ret += size.getMapSizeZ();
@@ -64,6 +66,7 @@ public class C23_MapArray {
 
 		if (array[array_x, array_z] != null) {
 			MonoBehaviour.Destroy(array[array_x, array_z].gameObject); // 配列内にオブジェクトが格納されていたら、削除する
+			array[array_x, array_z] = null; // 削除したら中身は空っぽにする
 		}
 
 		Vector3 scale 					= prefab.transform.localScale; // 受け渡されたオブジェクトのサイズを格納
@@ -72,7 +75,33 @@ public class C23_MapArray {
 		obj.name								= name + "[" + array_x + "," + array_z + "]";		// 作成したオブジェクトの名前変更
 		obj.transform.parent		= folder.transform;						// 作成したオブジェクトの親を、フォルダーにする
 		array[array_x, array_z]	= obj;
+	}
 
+	//---------------------------------------
+	// 指定された位置座標のオブジェクトを削除
+	// 配列に格納されている値の削除
+	//---------------------------------------
+	protected void deleteObject(C22_MapAxis.Axis_XZ arg) {
+		deleteObject(arg.x, arg.z);
+	}
+
+	protected void deleteObject(int x, int z) {
+		int array_x = getArrayNumX(x);
+		int array_z = getArrayNumZ(z);
+		if (array[array_x, array_z] != null) { //配列内にオブジェクトが格納されていたら削除
+			MonoBehaviour.Destroy(array[array_x, array_z].gameObject);
+			array[array_x, array_z] = null;
+		}
+	}
+
+	//---------------------------------------
+	// マップ始点・終点の配列座標の取得
+	//---------------------------------------
+	protected void renewal_arrayAxis() {
+		arrayAxis_Start.x	= getArrayNumX(axis.getAxisMapStartX());	// マップ始点のX位置座標を、配列座標Xとして取得
+		arrayAxis_Start.z	= getArrayNumZ(axis.getAxisMapStartZ());	// マップ始点のZ位置座標を、配列座標Zとして取得
+		arrayAxis_End.x		= getArrayNumX(axis.getAxisMapEndX());	// マップ終点のX位置座標を、配列座標Xとして取得
+		arrayAxis_End.z		= getArrayNumZ(axis.getAxisMapEndZ());	// マップ終点のZ位置座標を、配列座標Zとして取得
 	}
 }
 
@@ -113,6 +142,7 @@ public class MapArrayBlock : C23_MapArray {
 	// スタート時のマップ(床)作成
 	//---------------------------------------
 	public void startMap_Create(){
+		renewal_arrayAxis();
 		if(block.Length != 0){
 			int n;	// 床タイプ番号
 			for (int z = 0; z < size.getMapSizeZ(); z++) {
@@ -183,12 +213,20 @@ public class MapArrayFloor : C23_MapArray{
 	private GameObject[] wall;		// 壁オブジェクトの参照用
 
 	private GameObject[] obstacle;		// 障害物オブジェクト格納用配列
+	private bool[,] isMoveArea;				// プレイヤーが移動できるエリア
+	private bool isMapAppropriate;		// プレイヤーがそのマップで移動可能かどうかの判定
 
 	//---------------------------------------
 	// constructor
 	//---------------------------------------
-	public MapArrayFloor (string name, C21_MapSize size, C22_MapAxis axis) : base(name, size, axis) {
-
+	public MapArrayFloor (string name, C21_MapSize size, C22_MapAxis axis) : base(name, size, axis) { //配列の確保とfalseに初期化
+		isMapAppropriate = false;
+		isMoveArea = new bool[size.getMapSizeX(), size.getMapSizeZ()];
+		for (int z = 0; z < size.getMapSizeZ(); z++) {
+			for (int x = 0; x < size.getMapSizeX(); x++) {
+				isMoveArea[x, z] = false;
+			}
+		}
 	}
 
 	//---------------------------------------
@@ -209,10 +247,13 @@ public class MapArrayFloor : C23_MapArray{
 	// スタート時のマップ(地上)作成
 	//---------------------------------------
 	public void startMap_Create(){
+		renewal_arrayAxis();
 		for (int z = 0; z< size.getMapSizeZ(); z++) {
-			cleateObject(wall[0], axis.getAxisMapStartX(), z);					// 0列目に壁オブジェクト作成
+			cleateObject(wall[0], axis.getAxisMapStartX(), z);	// 0列目に壁オブジェクト作成
 			cleateObject(wall[0], axis.getAxisMapEndX(), z);		// (マップサイズ－１)列目に壁オブジェクト作成
 		}
+		isAxis_SetIsMoveArea(axis.getNowAxis_XZ());							// 該当座標を基準に調べ、プレイヤーが移動出来るエリアをtrueに変えていく
+		isMapInPlayerMoving();																// Map上端の一列を確認し、プレイヤーが移動できるかどうか判定
 	}
 
 	//---------------------------------------
@@ -221,6 +262,17 @@ public class MapArrayFloor : C23_MapArray{
 	public void renewal(){
 		renewal_wallZ();			// 行方向のマップ(壁)の更新
 		randomSetObstacleZ();	// 行方向のマップ(障害物)の更新
+
+		if (axis.getDifferenceAxis().z > 0) { // 位置座標の差分Zがプラスなら
+			renewal_arrayAxis();								// 配列座標を更新
+			renewal_IsMoveArea();								// マップ上端一列のプレイヤー移動可能判定を更新
+			isMapInPlayerMoving();							// 移動可能かどうかの判定
+
+			while(!isMapAppropriate) {					// プレイヤー移動可能となるまで
+				correctMap();											// Map修正
+				isMapInPlayerMoving();						// 移動可能かどうかの判定
+			}
+		}
 	}
 
 	//---------------------------------------
@@ -250,7 +302,10 @@ public class MapArrayFloor : C23_MapArray{
 			if (obstacle.Length != 0) {
 				for (int x = 1; x < size.getMapSizeX() - 1; x++) {
 					if (Random.Range(0, 100) < 30) {	// ランダム値0～99で30以下なら、壁を生成
-						cleateObject(obstacle[0], x + posAxis.x, posAxis.z); // 壁
+						int randomize = Random.Range(0, obstacle.Length);
+						cleateObject(obstacle[randomize], x + posAxis.x, posAxis.z); // 壁
+					} else {
+						deleteObject(x + posAxis.x, posAxis.z); // objectの削除
 					}
 				}
 			}
@@ -258,4 +313,126 @@ public class MapArrayFloor : C23_MapArray{
 			return;	// 配列の中身がない場合は何もせずに抜ける
 		}
 	}
+
+	//------------------------------------------------------------------------
+	// playerの移動可能エリアの判定
+	// 渡された位置座標を配列座標に変換し、プレイヤーが移動できるエリアをtrueに
+	//------------------------------------------------------------------------
+	private void isAxis_SetIsMoveArea(C22_MapAxis.Axis_XZ arg) {
+		isAxis_SetIsMoveArea(arg.x, arg.z);
+	}
+
+	private void isAxis_SetIsMoveArea(int x, int z) {
+		isAxisArray_SetIsMoveArea(getArrayNumX(x), getArrayNumZ(z));
+	}
+
+	//------------------------------------------------------------------------
+	// 受け渡された配列座標からプレイヤーが移動できるエリアをtrueに
+	//------------------------------------------------------------------------
+	private void isAxisArray_SetIsMoveArea(int array_x, int array_z) {
+		if (array[array_x, array_z] == null && !isMoveArea[array_x, array_z]) { //その配列座標が空(オブジェクトが入っていない)　かつ　falseなら
+			isMoveArea[array_x, array_z] = true;	// trueにする
+			isDir_IsMoveArea(array_x, array_z);		// その配列座標の周囲を調べ、オブジェクトがなければtrueに変える
+		}
+	}
+
+	//------------------------------------------------------------------------
+	// 受け渡された配列座標の上下左右を調べ
+	// objectがなければtrueに変える
+	//------------------------------------------------------------------------
+	private void isDir_IsMoveArea(int array_x, int array_z) {
+		if (array_x != arrayAxis_Start.x) { // Map左端でないとき
+			isAxis_SetIsMoveArea(getArrayNumX(array_x - 1), array_z); // x-1座標を、プレイヤーが移動出来るエリアかどうか調べる
+		}
+		if (array_x != arrayAxis_Start.x) { // Map左端でないとき
+			isAxis_SetIsMoveArea(array_x, getArrayNumZ(array_z - 1)); // z-1座標を、プレイヤーが移動出来るエリアかどうか調べる
+		}
+		if (array_x != arrayAxis_Start.x) { // Map左端でないとき
+			isAxis_SetIsMoveArea(getArrayNumX(array_x + 1), array_z); // x+1座標を、プレイヤーが移動出来るエリアかどうか調べる
+		}
+		if (array_x != arrayAxis_Start.x) { // Map左端でないとき
+			isAxis_SetIsMoveArea(array_x, getArrayNumZ(array_z + 1)); // z+1座標を、プレイヤーが移動出来るエリアかどうか調べる
+		}
+	}
+
+	//------------------------------------------------------------------------
+	// Mapの上端一列を確認し、プレイヤーが移動できるかどうかを判定
+	// 例:5×5のマスを考える。
+	// 上方向にプレイヤーが移動するので、上一列に移動可能である◎が存在すればOK
+	// 良い例
+	//　■◎◎◎◎◎■		←この列を見ればOK
+	//　■◎◎◎◎◎■
+	//　■◎◎◎■◎■
+	//　■◎■ ■ ■◎■
+	//　■◎◎◎◎◎■
+	// 今回の実装では、一つでも◎があれば移動できると判定できる
+	//------------------------------------------------------------------------
+	private void isMapInPlayerMoving() {
+		for (int x = 1; x < size.getMapSizeX() - 1; x++) {
+			if (getIsMoveArea(axis.getAxisMapStartX() + x, axis.getAxisMapEndZ())) { // 指定座標(マップ上端一列)を調査し、プレイヤーが移動出来るエリアを見つけたら
+				isMapAppropriate = true;
+				return;
+			}
+		}
+		isMapAppropriate = false; // そのマップは移動不可
+	}
+
+	//-------------------------------------------------------------------------
+	// 指定された位置座標のisMoveAreaの値を返す
+	//-------------------------------------------------------------------------
+	private bool getIsMoveArea(int x, int z) {
+		return isMoveArea[getArrayNumX(x), getArrayNumZ(z)];
+	}
+
+	//-------------------------------------------------------------------------
+	// 指定された位置座標のisMoveAreaをfalseにする
+	//-------------------------------------------------------------------------
+	private void setIsMoveArea_False(int x, int z) {
+		isMoveArea[getArrayNumX(x), getArrayNumZ(z)] = false;
+	}
+
+	//-------------------------------------------------------------------------
+	// マップ上端一列のisMoveAreaを更新
+	//-------------------------------------------------------------------------
+	private void renewal_IsMoveArea() {
+		for (int x = 1; x < size.getMapSizeX() - 1; x++) {
+			setIsMoveArea_False(axis.getAxisMapStartX() + x, axis.getAxisMapEndZ());
+		}
+		for (int x = 1; x < size.getMapSizeX() - 1; x++) {
+			isRenewalMapAxisIsMoveArea(axis.getAxisMapStartX() + x, axis.getAxisMapEndZ()); // 指定座標とその真下座標を調べ、プレイヤーが通れるなら、プレイヤーが移動出来るエリアをtrueに変えていく
+		}
+	}
+
+	//------------------------------------------------------------------------
+	// 受け渡された位置座標と、その下を調べる。
+	// プレイヤーが通れるなら、プレイヤーが移動できるエリアをTrueに
+	//------------------------------------------------------------------------
+	private void isRenewalMapAxisIsMoveArea(int x, int z) {
+		int array_x = getArrayNumX(x);		// 配列座標Xを取得
+		int array_z = getArrayNumZ(z);		// 配列座標Zを取得
+
+		if(array[array_x , array_z] != null || isMoveArea[array_x, array_z]){
+			return;
+		}	// 該当座標が空でない、もしくはtrueなら、処理を抜ける
+
+		if(isMoveArea[array_x, getArrayNumZ(array_z - 1)]) {		// 真下の座標がtrueなら
+			isAxis_SetIsMoveArea(array_x, array_z);	//
+		}
+	}
+
+	//-----------------------------------------------------------------------
+	// map修正
+	//-----------------------------------------------------------------------
+	private void correctMap() {
+		int array_x = getArrayNumX(axis.getAxisMapStartX() + Random.Range(1, size.getMapSizeX() - 1));
+		int array_z = arrayAxis_End.z;
+
+		if (array[array_x, array_z] != null) {
+			if (isMoveArea[array_x, getArrayNumZ(array_z - 1)]) { // 指定座標Z-1がプレイヤー通行可能エリアだった場合
+				deleteObject(array_x, array_z);											// その座標のオブジェクトを破壊
+				isAxisArray_SetIsMoveArea(array_x, arrayAxis_End.z);// プレイヤーが移動出来るエリアをtrueに変えていく
+			}
+		}
+	}
+
 }

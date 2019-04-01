@@ -56,6 +56,7 @@
      <Compile Include="Assets\F01_Script\C03_MapCreate.cs" />
      <Compile Include="Assets\F01_Script\C11_Weapon.cs" />
      <Compile Include="Assets\F01_Script\C12_Bom.cs" />
+     <Compile Include="Assets\F01_Script\C13_Status.cs" />
      <Compile Include="Assets\F01_Script\C21_MapSize.cs" />
      <Compile Include="Assets\F01_Script\C22_MapAxis.cs" />
      <Compile Include="Assets\F01_Script\C23_MapArray.cs" />
