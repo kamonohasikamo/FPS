@@ -20,6 +20,8 @@ public class C01_PlayerController : MonoBehaviour {
   private int gun_sound = 0;                    // 銃撃音No
   private int bomb_throw_sound = 1;             // ボム投げる音No
   private bool isButton = false;                // ボタン上に指がある場合は攻撃無効化
+	private bool isDamage = false;								// ダメージを受けるかどうか
+	private int wallDamageSound = 3;							// ダメージ壁にぶつかる音No.
 
   public int gunBulletNum;                      //弾数
   public GameObject targetEnemy = null;         //ターゲット格納用変数
@@ -170,17 +172,32 @@ public class C01_PlayerController : MonoBehaviour {
       c93_UI.isChangeText(weapon.getWeaponType());                // 武器テキスト表示切替
     }
 
+		//---------------------------------------------------------------------
+		// 壁にぶつかった時のダメージ量調整
+		// これがないと、一瞬で体力がなくなってしまう
+		//---------------------------------------------------------------------
+		IEnumerator invincibleTime(float time) {
+			isDamage = true;
+			yield return new WaitForSeconds(time);	// 処理待機. 引き渡された時間だけ待機する
+			isDamage = false;
+		}
+
     //---------------------------------------------------------------------
     // CharacterControllerに何かが当たっているときに呼び出される関数
     //---------------------------------------------------------------------
     void OnControllerColliderHit(ControllerColliderHit hit) {
-      if (hit.gameObject.tag == "DamageArea") {
-        if (hit.gameObject.GetComponent< C13_Status >()) { // 衝突した相手が C13_Status コンポーネントを持っているなら
-          GetComponent< C13_Status >().damage(hit.gameObject.GetComponent< C13_Status >()); // HPを減らす
-					c93_UI.changeTextPlayerHP();
+			if (!isDamage) {
+				if (hit.gameObject.tag == "DamageArea") {
+					if (hit.gameObject.GetComponent< C13_Status >()) { // 衝突した相手が C13_Status コンポーネントを持っているなら
+						GetComponent< C13_Status >().damage(hit.gameObject.GetComponent< C13_Status >()); // HPを減らす
+						c93_UI.changeTextPlayerHP();
+						StartCoroutine("invincibleTime", 0.5f);
+						c93_UI.StartCoroutine("monitorFlash");								// C93_UITextクラスのmonitorFlash関数の呼び出し
+						c92_Sound.SendMessage("soundStart", wallDamageSound);	//InspectorのElementの3に衝突音を入れたので、その音を鳴らす
+					}
 				}
-      }
-    }
+			}
+		}
 
     //------------------------------
   	// 視点モードの切り替え
