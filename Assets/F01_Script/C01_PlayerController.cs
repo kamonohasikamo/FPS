@@ -111,7 +111,7 @@ public class C01_PlayerController : MonoBehaviour {
       if(targetEnemy != null) { //target(敵)が存在すれば
         GameObject effect = Instantiate(prefab_hitEffect1, attackPoint, Quaternion.identity) as GameObject; //エフェクト発生
         Destroy(effect, 0.2f); //effect削除
-        Destroy(targetEnemy);  //敵削除
+        targetEnemy.SendMessage("damage");  // ターゲットしたオブジェクトに、damege()関数を呼び出すようにメッセ―ジ送信
       }
 
       c92_Sound.SendMessage("soundStart", gun_sound);  // 音を鳴らす
