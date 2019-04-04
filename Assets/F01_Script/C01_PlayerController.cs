@@ -101,27 +101,27 @@ public class C01_PlayerController : MonoBehaviour {
       }
     }
 
-    //------------------------------
-  	// 銃の攻撃
-  	//------------------------------
-    private void attack01_gun() {
-      if (gunBulletNum <= 0) {
-        return; //残弾がないので
-      }
-      if(targetEnemy != null) { //target(敵)が存在すれば
-        GameObject effect = Instantiate(prefab_hitEffect1, attackPoint, Quaternion.identity) as GameObject; //エフェクト発生
-        Destroy(effect, 0.2f); //effect削除
-        targetEnemy.SendMessage("damage");  // ターゲットしたオブジェクトに、damege()関数を呼び出すようにメッセ―ジ送信
-      }
+		//------------------------------
+		// 銃の攻撃
+		//------------------------------
+		private void attack01_gun() {
+			if (gunBulletNum <= 0) {
+				return; //残弾がないので
+			}
+			if(targetEnemy != null) { //target(敵)が存在すれば
+				GameObject effect = Instantiate(prefab_hitEffect1, attackPoint, Quaternion.identity) as GameObject; //エフェクト発生
+				Destroy(effect, 0.2f); //effect削除
+				targetEnemy.GetComponent< C05_Enemy >().atkDamage(GetComponent< C13_Status >());	// 攻撃した敵が持つ《C05_Enemy》コンポーネントのatkDamege()関数を実行
+			}
 
-      c92_Sound.SendMessage("soundStart", gun_sound);  // 音を鳴らす
+			c92_Sound.SendMessage("soundStart", gun_sound);  // 音を鳴らす
 
-      gunBulletNum--;
-      c93_UI.changeTextGunNum(gunBulletNum);  // UITextの表示を変える
-      if (gunBulletNum <= 0) {
-        StartCoroutine("reChargeGun");  //銃のコルーチン開始
-      }
-    }
+			gunBulletNum--;
+			c93_UI.changeTextGunNum(gunBulletNum);  // UITextの表示を変える
+			if (gunBulletNum <= 0) {
+				StartCoroutine("reChargeGun");  //銃のコルーチン開始
+			}
+		}
 
     //------------------------------
     // 銃の使用制限コルーチン
@@ -182,6 +182,21 @@ public class C01_PlayerController : MonoBehaviour {
 			isDamage = false;
 		}
 
+		//---------------------------------------------------------------------
+		// CharacterControllerに何かが当たっているときに呼び出される関数
+		//---------------------------------------------------------------------
+		public void clashDamage(C13_Status enemyStatus) {
+			if (!isDamage) {
+				GetComponent< C13_Status >().damage(enemyStatus);
+				c93_UI.changeTextPlayerHP();
+				StartCoroutine("invincibleTime", 0.5f);
+
+				c93_UI.StartCoroutine("monitorFlash"); // C93_UITextクラスのmonitorFlash関数の呼び出し
+				c92_Sound.SendMessage("soundStart", wallDamageSound); //InspectorのElementの3に衝突音を入れたので、その音を鳴らす
+			}
+		}
+
+		/*使わないのでコメントアウト
     //---------------------------------------------------------------------
     // CharacterControllerに何かが当たっているときに呼び出される関数
     //---------------------------------------------------------------------
@@ -198,13 +213,14 @@ public class C01_PlayerController : MonoBehaviour {
 				}
 			}
 		}
+		*/
 
-    //------------------------------
-  	// 視点モードの切り替え
-  	//------------------------------
-    public void changeModeType(bool type) {
-      moveType = type;
-    }
+		//------------------------------
+		// 視点モードの切り替え
+		//------------------------------
+		public void changeModeType(bool type) {
+			moveType = type;
+		}
 
     //------------------------------
     // 一人称視点
