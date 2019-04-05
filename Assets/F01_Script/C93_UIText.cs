@@ -11,6 +11,7 @@ public class C93_UIText : MonoBehaviour {
 	private Animator animatorTextBomb;		// textBombオブジェクトが持っているAnimatorコンポーネントを操作する変数
 	public Text textPlayerHP;							// PlayerのHP表示用
 	private C13_Status playerStatus;			// Playerのstatus参照用
+	public Image panelFlashMonitor;				// damageを受けた時の画面描写
 
 	//------------------------------------------
 	// Start()関数よりも先に実行される初期化関数
@@ -18,6 +19,16 @@ public class C93_UIText : MonoBehaviour {
 	void Awake() {
 		animatorTextBomb = GameObject.Find("BombNumTextFront").GetComponent< Animator >();
 	}
+
+	//------------------------------------------
+	// damageを受けた時の画面描写
+	//------------------------------------------
+	IEnumerator monitorFlash() {
+		panelFlashMonitor.enabled = true;
+		yield return new WaitForSeconds(0.1f);
+		panelFlashMonitor.enabled = false;
+	}
+
 	//-----------------------
 	// 残弾数を変更する(Text)
 	//-----------------------

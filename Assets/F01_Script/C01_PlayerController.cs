@@ -20,6 +20,8 @@ public class C01_PlayerController : MonoBehaviour {
   private int gun_sound = 0;                    // 銃撃音No
   private int bomb_throw_sound = 1;             // ボム投げる音No
   private bool isButton = false;                // ボタン上に指がある場合は攻撃無効化
+	private bool isDamage = false;								// ダメージを受けるかどうか
+	private int wallDamageSound = 3;							// ダメージ壁にぶつかる音No.
 
   public int gunBulletNum;                      //弾数
   public GameObject targetEnemy = null;         //ターゲット格納用変数
@@ -99,27 +101,27 @@ public class C01_PlayerController : MonoBehaviour {
       }
     }
 
-    //------------------------------
-  	// 銃の攻撃
-  	//------------------------------
-    private void attack01_gun() {
-      if (gunBulletNum <= 0) {
-        return; //残弾がないので
-      }
-      if(targetEnemy != null) { //target(敵)が存在すれば
-        GameObject effect = Instantiate(prefab_hitEffect1, attackPoint, Quaternion.identity) as GameObject; //エフェクト発生
-        Destroy(effect, 0.2f); //effect削除
-        Destroy(targetEnemy);  //敵削除
-      }
+		//------------------------------
+		// 銃の攻撃
+		//------------------------------
+		private void attack01_gun() {
+			if (gunBulletNum <= 0) {
+				return; //残弾がないので
+			}
+			if(targetEnemy != null) { //target(敵)が存在すれば
+				GameObject effect = Instantiate(prefab_hitEffect1, attackPoint, Quaternion.identity) as GameObject; //エフェクト発生
+				Destroy(effect, 0.2f); //effect削除
+				targetEnemy.GetComponent< C05_Enemy >().atkDamage(GetComponent< C13_Status >());	// 攻撃した敵が持つ《C05_Enemy》コンポーネントのatkDamege()関数を実行
+			}
 
-      c92_Sound.SendMessage("soundStart", gun_sound);  // 音を鳴らす
+			c92_Sound.SendMessage("soundStart", gun_sound);  // 音を鳴らす
 
-      gunBulletNum--;
-      c93_UI.changeTextGunNum(gunBulletNum);  // UITextの表示を変える
-      if (gunBulletNum <= 0) {
-        StartCoroutine("reChargeGun");  //銃のコルーチン開始
-      }
-    }
+			gunBulletNum--;
+			c93_UI.changeTextGunNum(gunBulletNum);  // UITextの表示を変える
+			if (gunBulletNum <= 0) {
+				StartCoroutine("reChargeGun");  //銃のコルーチン開始
+			}
+		}
 
     //------------------------------
     // 銃の使用制限コルーチン
@@ -170,24 +172,55 @@ public class C01_PlayerController : MonoBehaviour {
       c93_UI.isChangeText(weapon.getWeaponType());                // 武器テキスト表示切替
     }
 
+		//---------------------------------------------------------------------
+		// 壁にぶつかった時のダメージ量調整
+		// これがないと、一瞬で体力がなくなってしまう
+		//---------------------------------------------------------------------
+		IEnumerator invincibleTime(float time) {
+			isDamage = true;
+			yield return new WaitForSeconds(time);	// 処理待機. 引き渡された時間だけ待機する
+			isDamage = false;
+		}
+
+		//---------------------------------------------------------------------
+		// CharacterControllerに何かが当たっているときに呼び出される関数
+		//---------------------------------------------------------------------
+		public void clashDamage(C13_Status enemyStatus) {
+			if (!isDamage) {
+				GetComponent< C13_Status >().damage(enemyStatus);
+				c93_UI.changeTextPlayerHP();
+				StartCoroutine("invincibleTime", 0.5f);
+
+				c93_UI.StartCoroutine("monitorFlash"); // C93_UITextクラスのmonitorFlash関数の呼び出し
+				c92_Sound.SendMessage("soundStart", wallDamageSound); //InspectorのElementの3に衝突音を入れたので、その音を鳴らす
+			}
+		}
+
+		/*使わないのでコメントアウト
     //---------------------------------------------------------------------
     // CharacterControllerに何かが当たっているときに呼び出される関数
     //---------------------------------------------------------------------
     void OnControllerColliderHit(ControllerColliderHit hit) {
-      if (hit.gameObject.tag == "DamageArea") {
-        if (hit.gameObject.GetComponent< C13_Status >()) { // 衝突した相手が C13_Status コンポーネントを持っているなら
-          GetComponent< C13_Status >().damage(hit.gameObject.GetComponent< C13_Status >()); // HPを減らす
-					c93_UI.changeTextPlayerHP();
+			if (!isDamage) {
+				if (hit.gameObject.tag == "DamageArea") {
+					if (hit.gameObject.GetComponent< C13_Status >()) { // 衝突した相手が C13_Status コンポーネントを持っているなら
+						GetComponent< C13_Status >().damage(hit.gameObject.GetComponent< C13_Status >()); // HPを減らす
+						c93_UI.changeTextPlayerHP();
+						StartCoroutine("invincibleTime", 0.5f);
+						c93_UI.StartCoroutine("monitorFlash");								// C93_UITextクラスのmonitorFlash関数の呼び出し
+						c92_Sound.SendMessage("soundStart", wallDamageSound);	//InspectorのElementの3に衝突音を入れたので、その音を鳴らす
+					}
 				}
-      }
-    }
+			}
+		}
+		*/
 
-    //------------------------------
-  	// 視点モードの切り替え
-  	//------------------------------
-    public void changeModeType(bool type) {
-      moveType = type;
-    }
+		//------------------------------
+		// 視点モードの切り替え
+		//------------------------------
+		public void changeModeType(bool type) {
+			moveType = type;
+		}
 
     //------------------------------
     // 一人称視点
