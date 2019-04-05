@@ -65,6 +65,7 @@
      <Compile Include="Assets\F01_Script\C21_MapSize.cs" />
      <Compile Include="Assets\F01_Script\C22_MapAxis.cs" />
      <Compile Include="Assets\F01_Script\C23_MapArray.cs" />
+     <Compile Include="Assets\F01_Script\C24_EnemyCreate.cs" />
      <Compile Include="Assets\F01_Script\C91_SightController.cs" />
      <Compile Include="Assets\F01_Script\C92_Sound.cs" />
      <Compile Include="Assets\F01_Script\C93_UIText.cs" />

@@ -209,7 +209,7 @@ public class MapArrayBlock : C23_MapArray {
 //==========================================
 // マップ配列(地上)を扱うクラス
 //==========================================
-public class MapArrayFloor : C23_MapArray{
+public partial class MapArrayFloor : C23_MapArray{
 	private GameObject[] wall;		// 壁オブジェクトの参照用
 
 	private GameObject[] obstacle;		// 障害物オブジェクト格納用配列
@@ -220,8 +220,9 @@ public class MapArrayFloor : C23_MapArray{
 	// constructor
 	//---------------------------------------
 	public MapArrayFloor (string name, C21_MapSize size, C22_MapAxis axis) : base(name, size, axis) { //配列の確保とfalseに初期化
-		isMapAppropriate = false;
-		isMoveArea = new bool[size.getMapSizeX(), size.getMapSizeZ()];
+		enemyFolder				=	new GameObject("EnemyFolder");
+		isMapAppropriate	=	false;
+		isMoveArea				=	new bool[size.getMapSizeX(), size.getMapSizeZ()];
 		for (int z = 0; z < size.getMapSizeZ(); z++) {
 			for (int x = 0; x < size.getMapSizeX(); x++) {
 				isMoveArea[x, z] = false;

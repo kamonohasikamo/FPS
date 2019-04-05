@@ -16,6 +16,7 @@ public class C03_MapCreate : MonoBehaviour {
 
 	public GameObject[] prefab_Block;
 	public GameObject[] prefab_WALL;
+	public GameObject[] prefab_Enemy;		// EnemyObjectPrefab配列
 
 	void Start() {
 		player		= GameObject.FindGameObjectWithTag("Player");	// プレイヤーオブジェクト格納
@@ -27,12 +28,14 @@ public class C03_MapCreate : MonoBehaviour {
 
 		mapFloor.setWall(prefab_WALL);			// 壁オブジェクトを渡す
 		mapFloor.setObstacle(prefab_WALL);	// 障害物用に壁オブジェクトを渡す
+		mapFloor.setEnemy(prefab_Enemy);		// 敵Objectを渡す
 
 		initialize();			// プレイヤー位置／マップ初期化
+		StartCoroutine("enemyEmitter", 1.0f);	// 敵出現コルーチン開始
 	}
 
 	//--------------------------------------
-	//player position / player init
+	// player position / player init
 	//--------------------------------------
 	private void initialize() {
 		playerAxis.initialize();
@@ -46,4 +49,13 @@ public class C03_MapCreate : MonoBehaviour {
 		mapFloor.renewal(); // 地上更新
 	}
 
+	//--------------------------------------
+	// Enemy出現用コルーチン
+	//--------------------------------------
+	IEnumerator enemyEmitter(float time) {
+		while (true) {
+			mapFloor.enemyArrival();								// 敵出現処理
+			yield return new WaitForSeconds(time);	// time秒処理待機
+		}
+	}
 }
