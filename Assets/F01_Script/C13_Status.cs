@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //=====================================================
-// プレイヤーのステータスに関するクラス
+// ステータスに関するクラス
 //=====================================================
 public class C13_Status : MonoBehaviour {
 	public int HP 	= 10;
