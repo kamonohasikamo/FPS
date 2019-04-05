@@ -3,11 +3,17 @@ UnityでFPSもどきを作成する<br>
 ゾンビ出現しました！！！！！！
 
 <dl>
-  <dt>操作方法</dt>
-  <dd>上下左右      ：WASD　または　↑↓←→</dd>
-  <dd>攻撃　　      ：左クリック　長押しで連射</dd>
-  <dd>武器変更      ：右クリック</dd>
-  <dd>ミニマップ変更 ：Tabキー</dd>
+  <dt>How To Use</dt>
+  <dd>Unity Version: Unity 2018.3.11f1</dd>
+  <dd>1. Clone this repository</dd>
+  <dd>2. Start the cloned repository on Unity</dd>
+  
+  <dt>How To Play</dt>
+  <dd>Front And Back  : W S  or  ↑ ↓</dd>
+  <dd>Left And Right  : A D  or  ← →</dd>
+  <dd>Attack          : Leftclick</dd>
+  <dd>WeaponChange    : Rightclick</dd>
+  <dd>MiniMapChange   : Tabkey</dd>
   
   <dt>使用可能武器</dt>
   <dd>銃　：20発、チャージ(リロード)タイムがある。</dd>
