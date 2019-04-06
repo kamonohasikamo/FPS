@@ -15,13 +15,13 @@ UnityでFPSもどきを作成する<br>
   <dd>WeaponChange    : Rightclick</dd>
   <dd>MiniMapChange   : Tabkey</dd>
   
-  <dt>使用可能武器</dt>
-  <dd>銃　：20発、チャージ(リロード)タイムがある。</dd>
-  <dd>ボム：爆発するまで次のものが投げれない。</dd>
+  <dt>AvailableWeaponList</dt>
+  <dd>Gan : Number of bullet:20, With relode time.</dd>
+  <dd>Bomb: The next bomb can not be throw until it explodes.</dd>
   
-  <dt>音</dt>
-  <dd>撃った時、投げた時、爆発するときに出るようにした。</dd>
-  <dd>ダメージ壁に当たるとさらに音が出る</dd>
+  <dt>Sound</dt>
+  <dd>When the sound sounds : When shooting a gun, throwing a bomb, when a bomb explodes</dd>
+  <dd>More : When the player touches the damageWall </dd>
 </dl> 
 
 # iOS版
