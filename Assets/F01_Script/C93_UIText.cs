@@ -12,6 +12,7 @@ public class C93_UIText : MonoBehaviour {
 	public Text textPlayerHP;							// PlayerのHP表示用
 	private C13_Status playerStatus;			// Playerのstatus参照用
 	public Image panelFlashMonitor;				// damageを受けた時の画面描写
+	public Text GameOverText;							// GameOverText
 
 	//------------------------------------------
 	// Start()関数よりも先に実行される初期化関数
@@ -102,5 +103,12 @@ public class C93_UIText : MonoBehaviour {
 			changeTextBomb(used);			// 手榴弾のテキスト変更
 			playerStatus = status;
 			changeTextPlayerHP();			// PlayerHPChange
+	}
+
+	//---------------------------------------------------------------
+	// GameOverText
+	//---------------------------------------------------------------
+	public void showGameOverText() {
+		GameOverText.enabled = true;
 	}
 }
