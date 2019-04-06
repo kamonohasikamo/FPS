@@ -1,7 +1,8 @@
 # FPS
 UnityでFPSもどきを作成する<br>
-ゾンビ出現しました！！！！！！
+ゾンビ出現しました！！！！！！<br>
 
+Creating FPS games in Unity
 <dl>
   <dt>How To Use</dt>
   <dd>Unity Version: Unity 2018.3.11f1</dd>
