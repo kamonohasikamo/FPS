@@ -26,4 +26,7 @@ Creating FPS games in Unity
 </dl> 
 
 # iOS版
-ジョイスティックの実装の実装からiOS版にも対応できそう？
+ジョイスティックの実装からiOS版にも対応できそう？<br>
+
+Creating JoyStick.<br>
+iOS version from JoyStick development?
