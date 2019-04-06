@@ -35,6 +35,9 @@ public class C05_Enemy : MonoBehaviour {
 			return;			// 死亡しているので
 		}
 		enemyMove();	// 移動処理
+		if (transform.position.y <= -10.0f) { // 現在位置が高さ-10以下なら、削除(マップから落ちた)
+			Destroy(gameObject);
+		}
 	}
 
 	//-----------------------------------------------------

@@ -58,6 +58,7 @@
      <Compile Include="Assets\F01_Script\C03_MapCreate.cs" />
      <Compile Include="Assets\F01_Script\C04_MapCamera.cs" />
      <Compile Include="Assets\F01_Script\C05_Enemy.cs" />
+     <Compile Include="Assets\F01_Script\C06_GameRule.cs" />
      <Compile Include="Assets\F01_Script\C11_Weapon.cs" />
      <Compile Include="Assets\F01_Script\C12_Bom.cs" />
      <Compile Include="Assets\F01_Script\C13_Status.cs" />
