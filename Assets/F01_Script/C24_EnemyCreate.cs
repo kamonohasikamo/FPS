@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 //====================================================
 // 敵を生成するためのクラス
 // C23_MapArrayを分割して、複数ファイルで記述

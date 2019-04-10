@@ -5,7 +5,6 @@ using UnityEngine;
 //====================================
 // MapSizeCollection
 //====================================
-
 public class C21_MapSize {
 	private const int DEFAULT_SIZE = 11;		//default value
 	private int map_size_x;									//mapsize x point

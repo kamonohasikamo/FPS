@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//==============================================
+// Weapon関係の処理を扱うクラス
+//==============================================
 public class C11_Weapon{
 	private int weaponType = 0; //武器タイプ
 	private int weaponNum  = 2; //武器の種類数

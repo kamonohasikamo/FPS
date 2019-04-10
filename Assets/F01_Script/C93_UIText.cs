@@ -3,6 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+//====================================================
+// UIに関する処理を記載するクラス。
+// ゲーム画面のHPや弾数などを扱う。
+//====================================================
 public class C93_UIText : MonoBehaviour {
 	public Text[] textGunNum;							// UIのテキスト情報を格納する変数配列
 	public Text textBomb;									// ボムの表示用
@@ -97,12 +101,12 @@ public class C93_UIText : MonoBehaviour {
 	// テキスト初期化用
 	//---------------------------------------------------------------
 	public void initialize(int type, int num, bool used, C13_Status status){
-			isChangeText(type);	// 武器タイプによるテキストの表示オン／オフ
+		isChangeText(type);	// 武器タイプによるテキストの表示オン／オフ
 
-			changeTextGunNum(num);		// 残弾数を変更
-			changeTextBomb(used);			// 手榴弾のテキスト変更
-			playerStatus = status;
-			changeTextPlayerHP();			// PlayerHPChange
+		changeTextGunNum(num);		// 残弾数を変更
+		changeTextBomb(used);			// 手榴弾のテキスト変更
+		playerStatus = status;
+		changeTextPlayerHP();			// PlayerHPChange
 	}
 
 	//---------------------------------------------------------------

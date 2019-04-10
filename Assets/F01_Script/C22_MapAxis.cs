@@ -37,14 +37,9 @@ public class C22_MapAxis {
 	// playerの初期座標を設定
 	//------------------------------
 	public void initialize() {
-		nowAxis.x = size.getMapHalfSizeX();	// 初期位置(移動後の座標)は、半マップサイズ
-		nowAxis.z = size.getMapHalfSizeZ();	// 初期位置(移動後の座標)は、半マップサイズ
-		player.transform.position
-		= new Vector3( // playerの位置を移動
-			nowAxis.x * scale.x,
-			player.transform.position.y,
-			nowAxis.z * scale.z
-		);
+		nowAxis.x									=	size.getMapHalfSizeX();	// 初期位置(移動後の座標)は、半マップサイズ
+		nowAxis.z									=	size.getMapHalfSizeZ();	// 初期位置(移動後の座標)は、半マップサイズ
+		player.transform.position	=	new Vector3(nowAxis.x * scale.x, player.transform.position.y, nowAxis.z * scale.z); // playerの位置を移動
 	}
 
 	//--------------------------------

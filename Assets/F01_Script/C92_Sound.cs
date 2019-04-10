@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//=================================================
+// Soundに関する処理を記載するクラス
+//=================================================
 public class C92_Sound : MonoBehaviour {
 	private AudioSource audioSourceComponent;	//AudioSourceコンポーネント格納用変数
 	public AudioClip[] sound;									//効果音格納用変数　複数使いたいので配列

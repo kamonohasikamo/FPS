@@ -8,6 +8,7 @@ using UnityEngine;
 public class C13_Status : MonoBehaviour {
 	public int HP 	= 10;
 	public int ATK	= 1;
+
 	//----------------------------------------------
 	// setter, getter
 	//----------------------------------------------

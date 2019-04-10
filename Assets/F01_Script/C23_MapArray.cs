@@ -5,7 +5,6 @@ using UnityEngine;
 //====================================
 // マップ配列を扱うクラス
 //====================================
-
 public class C23_MapArray {
 	protected string name;						// 配列の名前(オブジェクト名)
 	protected GameObject folder;			// 作成しタップオブジェクトを入れるフォルダ
@@ -151,7 +150,7 @@ public class MapArrayBlock : C23_MapArray {
 					cleateObject(block [n], x, z);			// オブジェクト作成
 				}
 			}
-		}else{
+		} else {
 			return;		// 配列の中身が無い場合は、何もせず抜ける
 		}
 	}
@@ -178,7 +177,7 @@ public class MapArrayBlock : C23_MapArray {
 					n = getInt_BlockType(posAxis.x, z + posAxis.z);			// 床タイプ番号を取得
 					cleateObject(block[n], posAxis.x, z + posAxis.z);		// オブジェクト作成
 				}
-			}else{
+			} else {
 				return;		// 配列の中身が無い場合は、何もせず抜ける
 			}
 		}
@@ -199,7 +198,7 @@ public class MapArrayBlock : C23_MapArray {
 					n = getInt_BlockType(x + posAxis.x, posAxis.z);			// 床タイプ番号を取得
 					cleateObject(block[n], x + posAxis.x, posAxis.z);		// オブジェクト作成
 				}
-			}else{
+			} else {
 				return;		// 配列の中身が無い場合は、何もせず抜ける
 			}
 		}
