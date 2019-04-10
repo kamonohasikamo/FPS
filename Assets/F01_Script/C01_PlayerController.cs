@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//========================================================
+// Playerに関する処理を扱うクラス
+//========================================================
 public class C01_PlayerController : MonoBehaviour {
 
 	private CharacterController charaController;  //charaコンポーネント用変数

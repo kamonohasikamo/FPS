@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class C04_MapCamera : MonoBehaviour
-{
+//========================================================
+// MapCamera(右上の図)を扱うクラス
+//========================================================
+public class C04_MapCamera : MonoBehaviour {
 	private GameObject player;
 
 	private int cameraViewMode	= 0;																	// CameraViewMode
