@@ -47,6 +47,7 @@ public class C05_Enemy : MonoBehaviour {
 	public void atkDamage(C13_Status atk_status){
 		c13_Status.damage(atk_status);				// ダメージ処理
 		if(c13_Status.getHP() == 0){					// HPがゼロだったら
+			GameObject.Find("GameRoot").GetComponent< C94_Score >().addScore();	// Score+1
 			isDead									=	true;			// 死亡判定
 			animator.SetBool("dead" , true);		// Animatorの変数deadを true に変更.
 			charaController.enabled	=	false;		//CharacterController》コンポーネントをオフに
