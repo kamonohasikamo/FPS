@@ -47,6 +47,12 @@ Creating FPS games in Unity.
   <dt>音</dt>
   <dd>音が鳴るとき : 銃を撃った時、ボムを投げた時、ボムが爆発するとき</dd>
   <dd>プレイヤーがダメージを受ける壁にぶつかったときにもなります。</dd>
+  
+  <dt>display</dt>
+  <dd>Number of bullet: Top Left.</dd>
+  <dd>HP: Second from the top left(middle).</dd>
+  <dd>Number of repulses: Third from the top left (bottom).</dd>
+
 </dl> 
 
 # iOS版
