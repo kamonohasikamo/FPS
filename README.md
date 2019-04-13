@@ -1,7 +1,7 @@
 # FPS
 UnityでFPSもどきを作成する<br>
 ゾンビ出現しました！！！！！！<br>
-撃退数も表示できるようにUIの変更を行いました<br>
+撃退数も表示できるようにUIの変更を行いました。(2019/4/14現在)<br>
 
 Creating FPS games in Unity.
 <dl>
