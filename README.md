@@ -52,7 +52,6 @@ Creating FPS games in Unity.
   <dd>Number of bullet: Top Left.</dd>
   <dd>HP: Second from the top left(middle).</dd>
   <dd>Number of repulses: Third from the top left (bottom).</dd>
-
 </dl> 
 
 # iOS版
