@@ -56,7 +56,7 @@ Creating FPS games in Unity.
   <dt>表示</dt>
   <dd>残弾数: 左上の一番上</dd>
   <dd>HP: 左上から二番目(真ん中)</dd>
-  <dd>撃退数: 左上から三番目(一番下).</dd>
+  <dd>撃退数: 左上から三番目(一番下)</dd>
   
 </dl> 
 
