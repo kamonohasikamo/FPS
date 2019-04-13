@@ -52,6 +52,12 @@ Creating FPS games in Unity.
   <dd>Number of bullet: Top Left.</dd>
   <dd>HP: Second from the top left(middle).</dd>
   <dd>Number of repulses: Third from the top left (bottom).</dd>
+  
+  <dt>表示</dt>
+  <dd>残弾数: 左上の一番上.</dd>
+  <dd>HP: 左上から二番目(真ん中)</dd>
+  <dd>撃退数: 左上から三番目(一番下).</dd>
+  
 </dl> 
 
 # iOS版
