@@ -58,7 +58,7 @@ Creating FPS games in Unity.
   <dd>HP: 左上から二番目(真ん中)</dd>
   <dd>撃退数: 左上から三番目(一番下)</dd>
   
-</dl> 
+</dl>
 
 # iOS版
 ジョイスティックの実装からiOS版にも対応できそう？<br>
