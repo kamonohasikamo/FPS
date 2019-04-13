@@ -71,6 +71,7 @@
      <Compile Include="Assets\F01_Script\C91_SightController.cs" />
      <Compile Include="Assets\F01_Script\C92_Sound.cs" />
      <Compile Include="Assets\F01_Script\C93_UIText.cs" />
+     <Compile Include="Assets\F01_Script\C94_Score.cs" />
      <Compile Include="Assets\KY_effects\Script\ConGUI.cs" />
      <Compile Include="Assets\KY_effects\Script\Lighting.cs" />
      <None Include="Assets\KY_effects\MagicEffectsPackFree\ReadMe.txt" />

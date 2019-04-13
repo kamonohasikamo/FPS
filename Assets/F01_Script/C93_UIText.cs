@@ -17,6 +17,7 @@ public class C93_UIText : MonoBehaviour {
 	private C13_Status playerStatus;			// Playerのstatus参照用
 	public Image panelFlashMonitor;				// damageを受けた時の画面描写
 	public Text GameOverText;							// GameOverText
+	public Text scoreText;								// ScoreText
 
 	//------------------------------------------
 	// Start()関数よりも先に実行される初期化関数
@@ -89,7 +90,7 @@ public class C93_UIText : MonoBehaviour {
 
 
 	//---------------------------------------------------------------
-	// テキスト初期化用
+	// HPテキストを変更
 	//---------------------------------------------------------------
 	public void changeTextPlayerHP() {
 		if (textPlayerHP != null) {
@@ -97,14 +98,25 @@ public class C93_UIText : MonoBehaviour {
 		}
 	}
 
+
+	//---------------------------------------------------------------
+	// changeTextScore
+	//---------------------------------------------------------------
+	public void changeTextScore(int value) {
+		if (scoreText != null) {
+			scoreText.text = "撃退数：" + value + "　体";
+		}
+	}
+
 	//---------------------------------------------------------------
 	// テキスト初期化用
 	//---------------------------------------------------------------
 	public void initialize(int type, int num, bool used, C13_Status status){
-		isChangeText(type);	// 武器タイプによるテキストの表示オン／オフ
+		isChangeText(type);				// 武器タイプによるテキストの表示オン／オフ
 
 		changeTextGunNum(num);		// 残弾数を変更
 		changeTextBomb(used);			// 手榴弾のテキスト変更
+		changeTextScore(0);				// changeTextScore
 		playerStatus = status;
 		changeTextPlayerHP();			// PlayerHPChange
 	}
@@ -115,4 +127,5 @@ public class C93_UIText : MonoBehaviour {
 	public void showGameOverText() {
 		GameOverText.enabled = true;
 	}
+
 }
